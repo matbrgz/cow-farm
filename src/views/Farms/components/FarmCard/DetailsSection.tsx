@@ -33,8 +33,8 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   return (
     <Wrapper>
       <Flex justifyContent="space-between">
-        <Text>{t('Total Liquidity')}:</Text>
-        <Text>{totalValueFormatted}</Text>
+        <Text color="orange">{t('Total Liquidity')}:</Text>
+        <Text color="orange">{totalValueFormatted}</Text>
       </Flex>
       {!removed && (
         <StyledLinkExternal href={addLiquidityUrl}>{t(`Get ${lpLabel}`, { name: lpLabel })}</StyledLinkExternal>

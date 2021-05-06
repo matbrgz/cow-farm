@@ -71,21 +71,33 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         .div(BIG_TEN.pow(quoteTokenDecimals))
         .times(lpTokenRatio)
 
+      const masterChefAddress = getMasterChefAddress()
       const [info, totalAllocPoint] = await multicall(masterchefABI, [
         {
-          address: getMasterChefAddress(),
+          address: masterChefAddress,
           name: 'poolInfo',
           params: [farmConfig.pid],
         },
         {
-          address: getMasterChefAddress(),
+          address: masterChefAddress,
           name: 'totalAllocPoint',
         },
       ])
 
       const allocPoint = new BigNumber(info.allocPoint._hex)
       const poolWeight = allocPoint.div(new BigNumber(totalAllocPoint))
-
+      // console.log({
+      //   calls,
+      //   quoteTokenBalanceLP: new BigNumber(quoteTokenBalanceLP).toNumber(),
+      //   tokenBalanceLP: new BigNumber(tokenBalanceLP).toNumber(),
+      //   lpTotalSupply: new BigNumber(lpTotalSupply).toNumber(),
+      //   lpTokenRatio: lpTokenRatio.toNumber(),
+      //   lpTokenBalanceMC: new BigNumber(lpTokenBalanceMC).toNumber(),
+      //   quoteTokenAmount: quoteTokenAmount.toNumber(),
+      //   tokenAmount: tokenAmount.toNumber(),
+      //   totalAllocPoint: new BigNumber(totalAllocPoint).toNumber(),
+      //   allocPoint: allocPoint.toNumber(),
+      // })
       return {
         ...farmConfig,
         tokenAmount: tokenAmount.toJSON(),

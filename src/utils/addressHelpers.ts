@@ -2,10 +2,11 @@ import addresses from 'config/constants/contracts'
 import tokens from 'config/constants/tokens'
 import { Address } from 'config/constants/types'
 
-export const getAddress = (address: Address): string => {
+export const getAddress = (address: Address, chainId?: string): string => {
   const mainNetChainId = 56
-  const chainId = process.env.REACT_APP_CHAIN_ID
-  return address[chainId] ? address[chainId] : address[mainNetChainId]
+  const foundChainId = chainId || process.env.REACT_APP_CHAIN_ID
+
+  return address[foundChainId] ? address[foundChainId] : address[mainNetChainId]
 }
 
 export const getCakeAddress = () => {

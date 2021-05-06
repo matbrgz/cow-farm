@@ -1329,6 +1329,19 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-11.0.0.tgz#719cf05fcc1abb6533610a2e0f5dd1e61eac14fe"
   integrity sha512-VoNqai1vR5anRF5Tuh/+SWDFk7xi7oMwHrHrbm1BprYXjB2RJsWLhUrStMssDxEl5lW/z3EUdg8RvH/IUBccSQ==
 
+"@cowswap/uikit@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/@cowswap/uikit/-/uikit-0.0.3.tgz#c109a8daa5a089cd48a5a00d1f49b706fe6fee49"
+  integrity sha512-br9wcOSj/xO5f+E/UajPz6eW3fWJwKJzb4ObOvGYfnGLj6DBnkvEznN4oBDvyyzHZwnTUTD2ZCrSlIT6dULlbQ==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    "@types/lodash" "^4.14.168"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-popper "^2.2.5"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
+
 "@crowdin/crowdin-api-client@^1.10.4":
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/@crowdin/crowdin-api-client/-/crowdin-api-client-1.10.5.tgz#bfb499ed79bf626d55dd925eb0380b6293f4ec2d"

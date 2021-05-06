@@ -3,6 +3,15 @@ const tokens = {
     symbol: 'BNB',
     projectLink: 'https://www.binance.com/',
   },
+  cow: {
+    symbol: 'MILK',
+    address: {
+      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+      97: '0xf6320DE21cE6acda727AC153Abb6094B0A569D71',
+    },
+    decimals: 18,
+    projectLink: 'https://lionswap.app/',
+  },
   cake: {
     symbol: 'CAKE',
     address: {
@@ -601,7 +610,7 @@ const tokens = {
     symbol: 'BUSD',
     address: {
       56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-      97: '',
+      97: '0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee',
     },
     decimals: 18,
     projectLink: 'https://www.paxos.com/busd/',

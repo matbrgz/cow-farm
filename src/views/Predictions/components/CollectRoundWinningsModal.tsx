@@ -17,7 +17,7 @@ import {
   ModalCloseButton,
 } from '@pancakeswap-libs/uikit'
 import { useWeb3React } from '@web3-react/core'
-import { usePriceBnbBusd } from 'state/hooks'
+// import { usePriceBnbBusd } from 'state/hooks'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { usePredictionsContract } from 'hooks/useContract'
@@ -52,7 +52,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
   const { t } = useTranslation()
   const { toastSuccess, toastError } = useToast()
   const predictionsContract = usePredictionsContract()
-  const bnbBusdPrice = usePriceBnbBusd()
+  // const bnbBusdPrice = usePriceBnbBusd()
 
   const handleClick = () => {
     predictionsContract.methods
@@ -107,7 +107,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
           <Box style={{ textAlign: 'right' }}>
             <Text>{formatBnb(payout)}</Text>
             <Text fontSize="12px" color="textSubtle">
-              {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`}
+              {/* {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`} */}
             </Text>
           </Box>
         </Flex>
