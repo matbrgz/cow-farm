@@ -8,7 +8,7 @@ import {
   Text,
   TeamPlayerIcon,
   TrophyGoldIcon,
-} from '@pancakeswap-libs/uikit'
+} from '@cowswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { UserTradingInformationProps } from '../../types'
 import { useCompetitionCakeRewards, getRewardGroupAchievements } from '../../helpers'

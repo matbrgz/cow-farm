@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@cowswap/uikit'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useStake from 'hooks/useStake'
@@ -60,10 +60,10 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
     ) : (
       <IconButtonWrapper>
         <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
-          <MinusIcon color="primary" width="14px" />
+          <MinusIcon color="text" width="14px" />
         </IconButton>
         <IconButton variant="tertiary" onClick={onPresentDeposit}>
-          <AddIcon color="primary" width="14px" />
+          <AddIcon color="text" width="14px" />
         </IconButton>
       </IconButtonWrapper>
     )
@@ -71,7 +71,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
 
   return (
     <Flex justifyContent="space-between" alignItems="center">
-      <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'textSubtle'}>{displayBalance()}</Heading>
+      <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading>
       {renderStakingButtons()}
     </Flex>
   )

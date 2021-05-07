@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, RowType } from '@pancakeswap-libs/uikit'
+import { Image, RowType } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -298,7 +298,7 @@ const Farms: React.FC = () => {
         </ControlContainer>
         {renderContent()}
         <div ref={loadMoreRef} />
-        <StyledImage src="/images/3dpan.png" alt="cowswap illustration" width={120} height={103} />
+        <StyledImage src="/images/banana-leaf.png" alt="cowswap illustration" width={500} height={333} />
       </Page>
     </>
   )

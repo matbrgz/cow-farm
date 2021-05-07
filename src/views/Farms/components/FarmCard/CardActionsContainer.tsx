@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js'
 import { useLocation } from 'react-router-dom'
 import { getAddress } from 'utils/addressHelpers'
 import { getBep20Contract } from 'utils/contractHelpers'
-import { Button, Flex, Text } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Text } from '@cowswap/uikit'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useWeb3 from 'hooks/useWeb3'
@@ -73,6 +73,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
       />
     ) : (
       <Button
+        variant="primary"
         mt="8px"
         width="100%"
         disabled={requestedApproval || location.pathname.includes('archived')}
@@ -86,17 +87,17 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   return (
     <Action>
       <Flex>
-        <Text bold textTransform="uppercase" color="orange" fontSize="12px" pr="3px">
+        <Text bold textTransform="uppercase" color="text" fontSize="12px" pr="3px">
           {/* TODO: Is there a way to get a dynamic value here from useFarmFromSymbol? */}
           GOUDA
         </Text>
-        <Text bold textTransform="uppercase" color="orange" fontSize="12px">
+        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
           {t('Earned')}
         </Text>
       </Flex>
       <HarvestAction earnings={earnings} pid={pid} />
       <Flex>
-        <Text bold textTransform="uppercase" color="orange" fontSize="12px" pr="3px">
+        <Text bold textTransform="uppercase" color="text" fontSize="12px" pr="3px">
           {lpName}
         </Text>
         <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">

@@ -32,35 +32,46 @@ const config: MenuEntry[] = [
     label: 'Farms',
     icon: 'FarmIcon',
     href: '/farms',
+    status: {
+      color: "failure", text: "LIVE"
+    }
   },
   {
     label: 'Pools',
     icon: 'PoolIcon',
     href: '/pools',
   },
-  {
-    label: 'Prediction',
-    icon: 'PredictionsIcon',
-    href: '/prediction',
-    status: {
-      text: 'BETA',
-      color: 'warning',
-    },
-  },
+  // {
+  //   label: 'Prediction',
+  //   icon: 'PredictionsIcon',
+  //   href: '/prediction',
+  //   status: {
+  //     text: 'BETA',
+  //     color: 'warning',
+  //   },
+  // },
   {
     label: 'Lottery',
     icon: 'TicketIcon',
-    href: '/lottery',
+    href: '/',
+    status: {
+      text: 'COMMING',
+      color: 'warning',
+    },
   },
+  // {
+  //   label: 'Collectibles',
+  //   icon: 'NftIcon',
+  //   href: '/collectibles',
+  // },
   {
-    label: 'Collectibles',
-    icon: 'NftIcon',
-    href: '/collectibles',
-  },
-  {
-    label: 'Team Battle',
+    label: 'NFT',
     icon: 'TeamBattleIcon',
-    href: '/competition',
+    href: '/',
+    status: {
+      text: 'COMMING',
+      color: 'warning',
+    },
   },
   {
     label: 'Teams & Profile',

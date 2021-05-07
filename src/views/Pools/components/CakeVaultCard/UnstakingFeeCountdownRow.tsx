@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text, TooltipText, useTooltip } from '@pancakeswap-libs/uikit'
+import { Flex, Text, TooltipText, useTooltip } from '@cowswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import useWithdrawalFeeTimer from 'hooks/cakeVault/useWithdrawalFeeTimer'
 import WithdrawalFeeTimer from './WithdrawalFeeTimer'

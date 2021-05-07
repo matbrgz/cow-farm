@@ -17,7 +17,7 @@ const farms: FarmConfig[] = [
   // },
   {
     pid: 1,
-    lpSymbol: 'COW-BNB LP',
+    lpSymbol: 'GOUDA-BNB LP',
     lpAddresses: {
       97: '0x07A4f5fd727Cb340226E6Dc0F329c2f6f4c7076C',
       56: '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',

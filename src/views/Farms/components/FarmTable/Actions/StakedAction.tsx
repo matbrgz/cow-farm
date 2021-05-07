@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton } from '@pancakeswap-libs/uikit'
+import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton } from '@cowswap/uikit'
 import { useLocation } from 'react-router-dom'
 import UnlockButton from 'components/UnlockButton'
 import { useWeb3React } from '@web3-react/core'
@@ -162,7 +162,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
           width="100%"
           disabled={requestedApproval || location.pathname.includes('archived')}
           onClick={handleApprove}
-          variant="secondary"
+          variant="text"
         >
           {t('Enable')}
         </Button>

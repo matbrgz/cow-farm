@@ -1,4 +1,4 @@
-import { Heading } from '@pancakeswap-libs/uikit'
+import { Heading } from '@cowswap/uikit'
 import styled, { DefaultTheme } from 'styled-components'
 
 const H1SizeStyles = (theme: DefaultTheme) => `

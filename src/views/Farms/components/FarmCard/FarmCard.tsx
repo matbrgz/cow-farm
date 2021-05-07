@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
-import { Flex, Text, Skeleton } from '@pancakeswap-libs/uikit'
+import { Flex, Text, Skeleton } from '@cowswap/uikit'
 import { Farm } from 'state/types'
 import { provider as ProviderType } from 'web3-core'
 import { useTranslation } from 'contexts/Localization'
@@ -127,8 +127,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       />
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
-          <Text color="orange">{t('APR')}:</Text>
-          <Text color="orange" bold style={{ display: 'flex', alignItems: 'center' }}>
+          <Text fontSize="20px" color="text">{t('APR')}:</Text>
+          <Text fontSize="20px" color="text" bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apr ? (
               <>
                 <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} />
@@ -141,8 +141,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         </Flex>
       )}
       <Flex justifyContent="space-between">
-        <Text color="orange">{t('Earn')}:</Text>
-        <Text color="orange" bold>{earnLabel}</Text>
+        <Text fontSize="20px" color="text">{t('Earn')}:</Text>
+        <Text fontSize="20px" color="text" bold>{earnLabel}</Text>
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />
