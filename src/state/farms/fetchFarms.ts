@@ -86,7 +86,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
       const allocPoint = new BigNumber(info.allocPoint._hex)
       const poolWeight = allocPoint.div(new BigNumber(totalAllocPoint))
-      console.log({
+      console.debug({
         calls,
         quoteTokenBalanceLP: new BigNumber(quoteTokenBalanceLP).toNumber(),
         tokenBalanceLP: new BigNumber(tokenBalanceLP).toNumber(),
