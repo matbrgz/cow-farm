@@ -20,6 +20,12 @@ const Wrapper = styled(Flex)`
   }
 `
 
+const HeadingStyled = styled(Heading)`
+  div {
+    text-align: left;
+  }
+`
+
 const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
@@ -33,10 +39,10 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
 
   return (
     <Wrapper mb="8px" justifyContent="space-between" alignItems="center">
-      <Heading fontSize="28px" color={rawEarningsBalance === 0 ? 'textDisabled' : 'text'}>
+      <HeadingStyled fontSize="28px" color={rawEarningsBalance === 0 ? 'textDisabled' : 'text'}>
         {displayBalance}
         {earningsBusd > 0 && <CardBusdValue fontSize="14px" value={earningsBusd} />}
-      </Heading>
+      </HeadingStyled>
       <Button
         variant="subtle"
         disabled={rawEarningsBalance === 0 || pendingTx}

@@ -104,7 +104,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
     : '-'
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
-  const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
+  const earnLabel = farm.dual ? farm.dual.earnLabel : 'GOUDA'
 
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
@@ -128,7 +128,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
           <Text fontSize="20px" color="text">{t('APR')}:</Text>
-          <Text fontSize="20px" color="text" bold style={{ display: 'flex', alignItems: 'center' }}>
+          <Text fontSize="20px" color="text" style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apr ? (
               <>
                 <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} />
@@ -142,7 +142,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       )}
       <Flex justifyContent="space-between">
         <Text fontSize="20px" color="text">{t('Earn')}:</Text>
-        <Text fontSize="20px" color="text" bold>{earnLabel}</Text>
+        <Text fontSize="20px" color="text">{earnLabel}</Text>
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />

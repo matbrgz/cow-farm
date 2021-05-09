@@ -4,13 +4,13 @@ const tokens = {
     projectLink: 'https://www.binance.com/',
   },
   cow: {
-    symbol: 'MILK',
+    symbol: 'GOUDA',
     address: {
       56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
-      97: '0xf6320DE21cE6acda727AC153Abb6094B0A569D71',
+      97: '0x54ccdddc3338230239d37090fb4105df315c3c10',
     },
     decimals: 18,
-    projectLink: 'https://lionswap.app/',
+    projectLink: 'https://cowswap.finance/',
   },
   cake: {
     symbol: 'CAKE',

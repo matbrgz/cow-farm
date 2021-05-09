@@ -1329,10 +1329,10 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-11.0.0.tgz#719cf05fcc1abb6533610a2e0f5dd1e61eac14fe"
   integrity sha512-VoNqai1vR5anRF5Tuh/+SWDFk7xi7oMwHrHrbm1BprYXjB2RJsWLhUrStMssDxEl5lW/z3EUdg8RvH/IUBccSQ==
 
-"@cowswap/uikit@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.npmjs.org/@cowswap/uikit/-/uikit-0.0.8.tgz#0268512c1d471c6d3dd9afa21e98289ae76db59f"
-  integrity sha512-KNvXlVMv5ULGyih4h1XuEecfZdP44hyJWb963CC1/r7wRERwXLF8p8PhBJrHqcA1cd+mMPQt60wz2hkav/jEPQ==
+"@cowswap/uikit@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cowswap/uikit/-/uikit-0.1.0.tgz#165b331269db7aa32de0142c3124bd589e40176a"
+  integrity sha512-9/1XqGQCQK8ABJrJDooN+vk8RNKY5TxWgQoRtTrpa0QDtF0Yud4/wfeGlGCYd3BqcyIO+uo6Lb0BtZPT/NHRGQ==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"

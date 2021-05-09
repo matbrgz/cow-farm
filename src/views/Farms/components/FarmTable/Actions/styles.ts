@@ -24,7 +24,7 @@ export const ActionContainer = styled.div`
 `
 
 export const ActionTitles = styled.div`
-  font-weight: 600;
+  font-weight: 400;
   font-size: 12px;
   margin-bottom: 8px;
 `
@@ -43,7 +43,7 @@ export const ActionContent = styled.div`
   align-items: center;
 `
 export const Earned = styled.div`
-  font-weight: 600;
+  font-weight: 400;
   font-size: 20px;
   color: ${({ theme }) => theme.colors.text};
 `
