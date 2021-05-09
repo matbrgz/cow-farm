@@ -16,10 +16,10 @@ const farms: FarmConfig[] = [
   //   quoteToken: tokens.wbnb,
   // },
   {
-    pid: 3,
+    pid: 1,
     lpSymbol: 'GOUDA-BNB LP',
     lpAddresses: {
-      97: '0xf51afC6Bbad5D90ba5265E721819D9249143E885',
+      97: '0x704A8c5Da8F78E760f835C1D85f15308269146cA',
       56: '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
     },
     token: tokens.cow,

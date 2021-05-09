@@ -7,7 +7,7 @@ const tokens = {
     symbol: 'GOUDA',
     address: {
       56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
-      97: '0x54ccdddc3338230239d37090fb4105df315c3c10',
+      97: '0xe815a2283b1d39c1814212f2a0e56594dcea849b',
     },
     decimals: 18,
     projectLink: 'https://cowswap.finance/',
