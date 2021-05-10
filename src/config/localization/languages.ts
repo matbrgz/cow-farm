@@ -1,7 +1,7 @@
-export const EN: Language = { code: 'en-US', language: 'English' }
+export const EN: Language = { code: 'EN', language: 'English' }
 
 export const languages = {
-  'en-US': EN,
+  'EN': EN,
 }
 
 export const languageList = Object.values(languages)
