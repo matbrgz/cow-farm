@@ -26,7 +26,7 @@ const DualTag = (props) => (
 )
 
 const ManualPoolTag = (props) => (
-  <Tag variant="secondary" outline startIcon={<RefreshIcon width="18px" color="textSubtle" mr="4px" />} {...props}>
+  <Tag variant="primary" outline startIcon={<RefreshIcon width="18px" color="textSubtle" mr="4px" />} {...props}>
     Manual
   </Tag>
 )

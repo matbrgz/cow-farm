@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@cowswap/uikit": "^0.1.0",
+    "@cowswap/uikit": "^0.1.1",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@crowdin/crowdin-api-client": "^1.10.4",
     "@ethersproject/abi": "^5.0.7",

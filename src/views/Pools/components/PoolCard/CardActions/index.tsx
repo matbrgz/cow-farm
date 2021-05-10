@@ -43,10 +43,10 @@ const CardActions: React.FC<CardActionsProps> = ({
         {harvest && (
           <>
             <Box display="inline">
-              <InlineText color="secondary" textTransform="uppercase" bold fontSize="12px">
+              <InlineText color="text" textTransform="uppercase" fontSize="12px">
                 {`${earningToken.symbol} `}
               </InlineText>
-              <InlineText color="textSubtle" textTransform="uppercase" bold fontSize="12px">
+              <InlineText color="textSubtle" textTransform="uppercase" fontSize="12px">
                 {t(`earned`)}
               </InlineText>
             </Box>
@@ -60,10 +60,10 @@ const CardActions: React.FC<CardActionsProps> = ({
           </>
         )}
         <Box display="inline">
-          <InlineText color={isStaked ? 'secondary' : 'textSubtle'} textTransform="uppercase" bold fontSize="12px">
+          <InlineText color={isStaked ? 'text' : 'textSubtle'} textTransform="uppercase" fontSize="12px">
             {isStaked ? stakingToken.symbol : t(`stake`)}{' '}
           </InlineText>
-          <InlineText color={isStaked ? 'textSubtle' : 'secondary'} textTransform="uppercase" bold fontSize="12px">
+          <InlineText color={isStaked ? 'textSubtle' : 'text'} textTransform="uppercase" fontSize="12px">
             {isStaked ? t(`staked`) : `${stakingToken.symbol}`}
           </InlineText>
         </Box>

@@ -31,7 +31,9 @@ export const useSousApprove = (lpContract: Contract, sousId) => {
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
-
+  // console.log({
+  //   lpContract, sousChefContract
+  // })
   const handleApprove = useCallback(async () => {
     try {
       const tx = await approve(lpContract, sousChefContract, account)
