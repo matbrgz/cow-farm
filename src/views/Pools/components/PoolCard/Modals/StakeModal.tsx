@@ -101,7 +101,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     >
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
-        <Flex alignItems="center" minWidth="70px">
+        <Flex alignItems="center" minWidth="90px">
           <Image src={`/images/tokens/${stakingToken.symbol}.png`} width={24} height={24} alt={stakingToken.symbol} />
           <Text ml="4px" bold>
             {stakingToken.symbol}
@@ -142,7 +142,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       </Button>
       {!isRemovingStake && (
         <StyledLink external href={BASE_EXCHANGE_URL}>
-          <Button width="100%" mt="8px" variant="secondary">
+          <Button width="100%" mt="8px" variant="primary">
             {t('Get')} {stakingToken.symbol}
           </Button>
         </StyledLink>
