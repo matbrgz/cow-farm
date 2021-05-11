@@ -70,15 +70,15 @@ const StakeAction: React.FC<StakeActionsProps> = ({
           <Text fontSize="12px" color="textSubtle">{`~${stakingMaxDollarValue || 0} USD`}</Text>
         </Flex>
         <Flex>
-          <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px">
-            <MinusIcon color="primary" width="24px" />
+          <IconButton variant="primary" onClick={onPresentUnstake} mr="6px">
+            <MinusIcon color="tertiary" width="24px" />
           </IconButton>
           <IconButton
-            variant="secondary"
+            variant="primary"
             onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired}
             disabled={isFinished}
           >
-            <AddIcon color="primary" width="24px" height="24px" />
+            <AddIcon color="tertiary" width="24px" height="24px" />
           </IconButton>
         </Flex>
       </Flex>

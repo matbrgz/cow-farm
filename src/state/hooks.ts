@@ -6,6 +6,7 @@ import { useAppDispatch } from 'state'
 import { orderBy } from 'lodash'
 import { Team } from 'config/constants/types'
 import Nfts from 'config/constants/nfts'
+import tokens from 'config/constants/tokens'
 import { getWeb3NoAccount } from 'utils/web3'
 import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -170,9 +171,14 @@ export const useGetApiPrices = () => {
 
 export const useGetApiPrice = (address: string) => {
   const prices = useGetApiPrices()
+  const cakePriceBusd = usePriceCakeBusd()
 
   if (!prices) {
     return null
+  }
+  const goudaAddreses = [tokens.cow.address[56], tokens.cow.address[97]]
+  if (goudaAddreses.includes(address.toLowerCase())) {
+    return cakePriceBusd.toNumber()
   }
 
   return prices[address.toLowerCase()]

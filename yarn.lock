@@ -1329,10 +1329,10 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-11.0.0.tgz#719cf05fcc1abb6533610a2e0f5dd1e61eac14fe"
   integrity sha512-VoNqai1vR5anRF5Tuh/+SWDFk7xi7oMwHrHrbm1BprYXjB2RJsWLhUrStMssDxEl5lW/z3EUdg8RvH/IUBccSQ==
 
-"@cowswap/uikit@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/@cowswap/uikit/-/uikit-0.1.1.tgz#fb6fb05b61f52c4746a86618fbd4e1baf6bcc432"
-  integrity sha512-pjV9qHJ3Oj600AHFUL1BsxKB5XSWyyRLrXlWVNYu7eVFLS+o93xcf4pI+vrzUqsoLwi7qUdFM7WMa990eeiRuw==
+"@cowswap/uikit@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@cowswap/uikit/-/uikit-0.1.2.tgz#324450d84cbe256ded329f2e94cbcede20ae3c84"
+  integrity sha512-LI73uUovwZkfz+PCrcbU9ZF12qADsPWOMrK17yRh/0fDUbWu55TRUjfOUIiB8JRYJaO6hBv3vm9dWYOICrI/Yw==
   dependencies:
     "@lottiefiles/lottie-player" "^1.0.3"
     "@popperjs/core" "^2.9.2"

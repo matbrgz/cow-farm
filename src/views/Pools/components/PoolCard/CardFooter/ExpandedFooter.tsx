@@ -121,13 +121,14 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({
         </Flex>
       )}
       <Flex mb="2px" justifyContent="flex-end">
-        <LinkExternal bold={false} small href={earningToken.projectLink}>
+        <LinkExternal bold={false} color="textSubtle" small href={earningToken.projectLink}>
           {t('View Project Site')}
         </LinkExternal>
       </Flex>
       {poolContractAddress && (
         <Flex mb="2px" justifyContent="flex-end">
           <LinkExternal
+            color="text"
             bold={false}
             small
             href={`${BASE_BSC_SCAN_URL}/address/${isAutoVault ? cakeVaultContractAddress : poolContractAddress}`}
@@ -139,7 +140,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({
       {account && isMetaMaskInScope && tokenAddress && (
         <Flex justifyContent="flex-end">
           <Text
-            color="primary"
+            color="textSubtle"
             small
             onClick={() => registerToken(tokenAddress, earningToken.symbol, earningToken.decimals, imageSrc)}
           >
