@@ -38,7 +38,7 @@ const Pools: React.FC = () => {
         <Image
           mx="auto"
           mt="12px"
-          src="/images/pool-syrup-cow.png"
+          src="/images/pool-syrup-cow.svg"
           alt="Pancake illustration"
           width={192}
           height={184.5}

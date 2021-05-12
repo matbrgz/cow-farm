@@ -68,42 +68,44 @@ const config: MenuEntry[] = [
   {
     label: 'Teams & Profile',
     icon: 'GroupsIcon',
-    items: [
-      {
-        label: 'Leaderboard',
-        href: '/teams',
-      },
-      {
-        label: 'Task Center',
-        href: '/profile/tasks',
-      },
-      {
-        label: 'Your Profile',
-        href: '/profile',
-      },
-    ],
+    href: '/',
+    // items: [
+    //   {
+    //     label: 'Leaderboard',
+    //     href: '/teams',
+    //   },
+    //   {
+    //     label: 'Task Center',
+    //     href: '/profile/tasks',
+    //   },
+    //   {
+    //     label: 'Your Profile',
+    //     href: '/profile',
+    //   },
+    // ],
   },
   {
     label: 'Info',
     icon: 'InfoIcon',
-    items: [
-      {
-        label: 'Overview',
-        href: 'https://cowswap.info',
-      },
-      {
-        label: 'Tokens',
-        href: 'https://cowswap.info/tokens',
-      },
-      {
-        label: 'Pairs',
-        href: 'https://cowswap.info/pairs',
-      },
-      {
-        label: 'Accounts',
-        href: 'https://cowswap.info/accounts',
-      },
-    ],
+    href: '/',
+    // items: [
+    //   {
+    //     label: 'Overview',
+    //     href: 'https://cowswap.info',
+    //   },
+    //   {
+    //     label: 'Tokens',
+    //     href: 'https://cowswap.info/tokens',
+    //   },
+    //   {
+    //     label: 'Pairs',
+    //     href: 'https://cowswap.info/pairs',
+    //   },
+    //   {
+    //     label: 'Accounts',
+    //     href: 'https://cowswap.info/accounts',
+    //   },
+    // ],
   },
   {
     label: 'IFO',
@@ -117,28 +119,29 @@ const config: MenuEntry[] = [
   {
     label: 'More',
     icon: 'MoreIcon',
-    items: [
-      {
-        label: 'Contact',
-        href: 'https://docs.cowswap.finance/contact-us',
-      },
-      {
-        label: 'Voting',
-        href: 'https://voting.cowswap.finance',
-      },
-      {
-        label: 'Github',
-        href: 'https://github.com/cowswap',
-      },
-      {
-        label: 'Docs',
-        href: 'https://docs.cowswap.finance',
-      },
-      {
-        label: 'Blog',
-        href: 'https://cowswap.medium.com',
-      },
-    ],
+    href: '/',
+    // items: [
+    //   {
+    //     label: 'Contact',
+    //     href: 'https://docs.cowswap.finance/contact-us',
+    //   },
+    //   {
+    //     label: 'Voting',
+    //     href: 'https://voting.cowswap.finance',
+    //   },
+    //   {
+    //     label: 'Github',
+    //     href: 'https://github.com/cowswap',
+    //   },
+    //   {
+    //     label: 'Docs',
+    //     href: 'https://docs.cowswap.finance',
+    //   },
+    //   {
+    //     label: 'Blog',
+    //     href: 'https://cowswap.medium.com',
+    //   },
+    // ],
   },
 ]
 

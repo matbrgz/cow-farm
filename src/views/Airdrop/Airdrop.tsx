@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Heading, Text } from '@cowswap/uikit'
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import Page from 'components/layout/Page'
 
 const Hero = styled.div`
@@ -94,17 +93,6 @@ const ProgessStyled = styled.ul`
   }
 `
 
-const StyledTwitter = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-  div {
-    box-shadow: #2b7bb9 -4px 4px 4px;
-    border-radius: 17px;
-  }
-`
-
-
 const Airdrop: React.FC = () => {
 
   return (
@@ -115,14 +103,7 @@ const Airdrop: React.FC = () => {
         </Heading>
         <Text color="textSubtle">Requirements to earn free crypto coins</Text>
         <CardImage src="/images/tweeter.png" alt="gouda logo" />
-        <StyledTwitter>
-          <CardImageAirdrop src="/images/airdrop.png" alt="gouda logo" />
-          <TwitterTimelineEmbed
-            sourceType="profile"
-            screenName="cowswap_finance"
-            options={{height: 400}}
-          />
-        </StyledTwitter>
+        <CardImageAirdrop src="/images/airdrop.png" alt="gouda logo" />
         <Text color="textSubtle">Native blockchain</Text>
         <CardImage src="/images/bsc.png" alt="gouda logo" />
         <Text color="textSubtle">Step-by-Step Guide CowSwap Airdrop</Text>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Heading, Text } from '@pancakeswap-libs/uikit'
 import { useTranslation } from 'contexts/Localization'
 import Page from 'components/layout/Page'
+import { TwitterTimelineEmbed } from 'react-twitter-embed';
 // import FarmStakingCard from 'views/Home/components/FarmStakingCard'
 // import LotteryCard from 'views/Home/components/LotteryCard'
 // import CakeStats from 'views/Home/components/CakeStats'
@@ -25,7 +26,7 @@ const Hero = styled.div`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     background-position: left center, right center;
-    height: 165px;
+    height: auto;
     padding-top: 0;
   }
 `
@@ -83,7 +84,12 @@ const Home: React.FC = () => {
         <Heading as="h1" size="xl" mb="24px" color="secondary">
           {t('Coming Soon')}
         </Heading>
-        <Text>{t('We will be celebrating the launch of our new site very soon')}</Text>
+        <Text mb="24px">{t('We will be celebrating the launch of our new site very soon')}</Text>
+        <TwitterTimelineEmbed
+            sourceType="profile"
+            screenName="cowswap_finance"
+            options={{height: 600, width: 500}}
+          />
       </Hero>
       {/* <div>
         <Cards>
