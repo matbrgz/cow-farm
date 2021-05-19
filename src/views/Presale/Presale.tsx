@@ -11,6 +11,7 @@ import { getFullDisplayBalance } from 'utils/formatBalance'
 import { getPresaleContract, getBep20Contract } from 'utils/contractHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getPresaleAddress, getAddress } from 'utils/addressHelpers'
+import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import tokens from 'config/constants/tokens'
@@ -51,6 +52,7 @@ const CardHeading = styled(Flex)`
 
 const Presale: React.FC = () => {
   const web3 = useWeb3()
+  const { toastSuccess, toastError } = useToast()
   const [allowance, setAllowance] = useState(BIG_ZERO)
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { currentBlock } = useBlock()
@@ -146,32 +148,52 @@ const Presale: React.FC = () => {
     [setValBnb],
   )
 
-  const handleBuyByBusd = useCallback(() => {
+  const handleBuyByBusd = useCallback(async() => {
     setBusdPending(true)
-    const value = new BigNumber(valBusd).times(10**18)
-    console.log({
-      value,
-      valBusd
-    })
-    presaleContract.methods
-      .buyByBUSD(value)
-      .send({ from: account, gas: 200000 })
-      .on('transactionHash', (tx) => {
-        setBusdPending(false)
-        return tx.transactionHash
+    try {
+      const value = new BigNumber(valBusd).times(10**18)
+      console.log({
+        value,
+        valBusd
       })
-  }, [valBusd, account, presaleContract])
+      await presaleContract.methods
+        .buyByBUSD(value)
+        .send({ from: account, gas: 200000 })
+        .on('transactionHash', (tx) => {
+          return tx.transactionHash
+        })
+      toastSuccess(
+        'Buy Presale',
+        'Your GOUDA have been transferred to your wallet!',
+      )
+      setBusdPending(false)
+    } catch (e) {
+      toastError('Canceled', 'Please try again and confirm the transaction.')
+      setBnbPending(false)
+    }
+    
+  }, [valBusd, account, presaleContract, toastError, toastSuccess])
 
-  const handleBuyByBnb = useCallback(() => {
+  const handleBuyByBnb = useCallback(async () => {
     setBnbPending(true)
-    presaleContract.methods
-      .buy()
-      .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString() })
-      .on('transactionHash', (tx) => {
-        setBnbPending(false)
-        return tx.transactionHash
-      })
-  }, [valBnb, account, presaleContract, presaleAddress])
+    try {
+      await presaleContract.methods
+        .buy()
+        .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString() })
+        .on('transactionHash', (tx) => {
+          return tx.transactionHash
+        })
+      toastSuccess(
+        'Buy Presale',
+        'Your GOUDA have been transferred to your wallet!',
+      )
+      setBnbPending(false)
+    } catch (e) {
+      toastError('Canceled', 'Please try again and confirm the transaction.')
+      setBnbPending(false)
+    }
+    
+  }, [valBnb, account, presaleContract, presaleAddress, toastError, toastSuccess])
 
   return (
     <>
@@ -249,7 +271,7 @@ const Presale: React.FC = () => {
               disabled={valBusd === '' || busdPending}
               onClick={handleBuyByBusd}
             >
-              {bnbPending ? 'Buying...' : 'Buy presale'}
+              {busdPending ? 'Buying...' : 'Buy presale'}
             </Button>) : (<Button
               variant="primary"
               mt="20px"
