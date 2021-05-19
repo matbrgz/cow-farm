@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Input, InputProps, Flex, Heading, Image, Text } from '@cowswap/uikit'
+import { Button, Input, InputProps, Flex, Text } from '@cowswap/uikit'
 import bnbIcon from '../icons/BNB.svg'
 
 interface ModalInputProps {
@@ -35,16 +35,8 @@ const StyledTokenInput = styled.div<InputProps>`
 
 const StyledInput = styled(Input)`
   box-shadow: none;
-  width: 150px;
+  width: 100px;
   padding: 0;
-`
-
-const StyledErrorMessage = styled(Text)`
-  position: absolute;
-  bottom: -22px;
-  a {
-    display: inline;
-  }
 `
 
 const PresaleInput: React.FC<ModalInputProps> = ({
@@ -53,8 +45,6 @@ const PresaleInput: React.FC<ModalInputProps> = ({
   onChange,
   onSelectMax,
   value,
-  addLiquidityUrl,
-  inputTitle,
 }) => {
   const isBalanceZero = max === '0' || !max
 

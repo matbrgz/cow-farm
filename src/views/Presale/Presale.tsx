@@ -1,22 +1,26 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { Flex, Heading, Image, Text, Button } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
+import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { getFullDisplayBalance } from 'utils/formatBalance'
-import { getPresaleContract } from 'utils/contractHelpers'
-import { getPresaleAddress } from 'utils/addressHelpers'
+import { getPresaleContract, getBep20Contract } from 'utils/contractHelpers'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getPresaleAddress, getAddress } from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
+import { useBlock } from 'state/hooks'
+import tokens from 'config/constants/tokens'
 import PresaleInput from './components/PresaleInput'
 
 import goudaIcon from './icons/GOUDA.svg'
 import arrowIcon from './icons/arrow.svg'
 import bnbIcon from './icons/BNB.svg'
 import busdIcon from './icons/BUSD.svg'
+import presaleBackground from './images/presale.svg'
 
 
 const FCard = styled.div`
@@ -30,6 +34,7 @@ const FCard = styled.div`
   padding: 24px;
   position: relative;
   text-align: center;
+  margin-top: 25px;
 `
 
 const CardHeading = styled(Flex)`
@@ -44,16 +49,89 @@ const CardHeading = styled(Flex)`
   }
 `
 
-
 const Presale: React.FC = () => {
   const web3 = useWeb3()
+  const [allowance, setAllowance] = useState(BIG_ZERO)
+  const [requestedApproval, setRequestedApproval] = useState(false)
+  const { currentBlock } = useBlock()
   const { account } = useWeb3React()
   const [valBnb, setValBnb] = useState('')
+  const [valBusd, setValBusd] = useState('')
+  const [remainingToken, setRemainingToken] = useState('0')
+  const [bnbPending, setBnbPending] = useState(false)
+  const [busdPending, setBusdPending] = useState(false)
   const { balance: bnbBalance } = useGetBnbBalance()
+  const busdBalance = useTokenBalance(getAddress(tokens.busd.address))
+
+  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  const presaleAddress = getPresaleAddress()
+
+  const presaleContract = useMemo(() => {
+    return getPresaleContract(presaleAddress, web3)
+  }, [presaleAddress, web3])
+
+  const busdContract = useMemo(() => {
+    return getBep20Contract(getAddress(tokens.busd.address), web3)
+  }, [web3])
+
+  const handleApprove = useCallback(async () => {
+    try {
+      setRequestedApproval(true)
+
+      if (account && presaleContract) {
+        await busdContract.methods
+          .approve(presaleContract.options.address, ethers.constants.MaxUint256)
+          .send({ from: account })
+      }
+      setRequestedApproval(false)
+
+      busdContract.methods.allowance(account, presaleAddress).call()
+      .then(res => setAllowance(new BigNumber(res)))
+    } catch (e) {
+      console.error(e)
+    }
+  }, [busdContract, account, presaleContract, presaleAddress])
+
+  useEffect(() => {
+    if (account) {
+      busdContract.methods.allowance(account, presaleAddress).call()
+        .then(res => setAllowance(new BigNumber(res)))
+    }
+  }, [busdContract, presaleAddress, account])
+
+  const fullBusdBalance = useMemo(() => {
+    return getFullDisplayBalance(busdBalance)
+  }, [busdBalance])
 
   const fullBnbBalance = useMemo(() => {
     return getFullDisplayBalance(bnbBalance)
   }, [bnbBalance])
+
+  useEffect(() => {
+    presaleContract.methods.getRemainingToken()
+    .call()
+    .then(value => setRemainingToken(new BigNumber(value)
+    .div(10**18)
+    .decimalPlaces(2).toFormat({
+      decimalSeparator: ',',
+      groupSeparator: '.',
+      groupSize: 3,
+      secondaryGroupSize: 3
+    }).toString()))
+  }, [currentBlock, presaleContract])
+
+  const handleSelectMaxBusd = useCallback(() => {
+    setValBusd(fullBusdBalance)
+  }, [fullBusdBalance, setValBusd])
+
+  const handleBusdChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (e.currentTarget.validity.valid) {
+        setValBusd(e.currentTarget.value.replace(/,/g, '.'))
+      }
+    },
+    [setValBusd],
+  )
 
   const handleSelectMaxBnb = useCallback(() => {
     setValBnb(fullBnbBalance)
@@ -68,32 +146,61 @@ const Presale: React.FC = () => {
     [setValBnb],
   )
 
-  const handleBuyByBnb = useCallback(async() => {
-    const presaleAddress = getPresaleAddress()
-    const presaleContract = getPresaleContract(presaleAddress, web3)
-    const gasPrice = await web3.eth.getGasPrice();
-    const gasPriceHex = web3.utils.toHex(Math.round(Number(gasPrice)));
-    console.log({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString(), gasPrice: gasPriceHex })
-    const res = await presaleContract.methods
-    .buy(new BigNumber(valBnb).times(10**18).toString())
-    .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString(), gasPrice: gasPriceHex })
-    .on('transactionHash', (tx) => {
-      return tx.transactionHash
+  const handleBuyByBusd = useCallback(() => {
+    setBusdPending(true)
+    const value = new BigNumber(valBusd).times(10**18)
+    console.log({
+      value,
+      valBusd
     })
-    console.log(res)
-  }, [valBnb, account, web3])
+    presaleContract.methods
+      .buyByBUSD(value)
+      .send({ from: account, gas: 200000 })
+      .on('transactionHash', (tx) => {
+        setBusdPending(false)
+        return tx.transactionHash
+      })
+  }, [valBusd, account, presaleContract])
+
+  const handleBuyByBnb = useCallback(() => {
+    setBnbPending(true)
+    presaleContract.methods
+      .buy()
+      .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString() })
+      .on('transactionHash', (tx) => {
+        setBnbPending(false)
+        return tx.transactionHash
+      })
+  }, [valBnb, account, presaleContract, presaleAddress])
 
   return (
     <>
       <Page>
-        <Heading as="h1" size="xl" mb="24px" color="text">
-          Presale
-        </Heading>
-        <Text fontSize="20px" color="text">Total:</Text>
+        <FlexLayout>
+          <div>
+            <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
+              Presale
+            </Heading>
+            <Text textAlign="left" fontSize="20px" color="textSubtle">Total:</Text>
+            <Text textAlign="left" fontSize="20px" color="text">3.000.000 Gouda</Text>
+            <Text textAlign="left" fontSize="20px" color="textSubtle">Remaining:</Text>
+            <Text textAlign="left" fontSize="20px" color="text">{remainingToken} Gouda</Text>
+          </div>
+          <div>
+            <Image
+              mx="auto"
+              mt="12px"
+              src={presaleBackground}
+              alt="Pancake illustration"
+              width={192}
+              height={184.5}
+            />
+          </div>
+        </FlexLayout>
         <FlexLayout>
           <FCard>
             <CardHeading>
-              <Heading color="text" mb="20px" >GOUDA - BNB</Heading>
+              <Heading fontSize="25px" color="text" mb="20px">BNB - GOUDA</Heading>
               <Flex justifyContent="center" alignItems="center">
                 <Image src={bnbIcon} alt="GOUDA - BNB" width={70} height={70} />
                 <Image margin="0 23px" src={arrowIcon} alt="GOUDA - BNB" width={25} height={25} />
@@ -112,21 +219,48 @@ const Presale: React.FC = () => {
               variant="primary"
               mt="20px"
               width="100%"
-              disabled={valBnb === ''}
+              disabled={valBnb === '' || bnbPending}
               onClick={handleBuyByBnb}
             >
-              Buy presale
+              {bnbPending ? 'Buying...' : 'Buy presale'}
             </Button>
           </FCard>
+          <FCard>
+            <CardHeading>
+              <Heading fontSize="25px" color="text" mb="20px" >BUSD - GOUDA</Heading>
+              <Flex justifyContent="center" alignItems="center">
+                <Image src={busdIcon} alt="GOUDA - BUSD" width={70} height={70} />
+                <Image margin="0 23px" src={arrowIcon} alt="GOUDA - BUSD" width={25} height={25} />
+                <Image src={goudaIcon} alt="GOUDA - BUSD" width={70} height={70} />
+              </Flex>
+            </CardHeading>
+            <PresaleInput
+              onSelectMax={handleSelectMaxBusd}
+              onChange={handleBusdChange}
+              value={valBusd}
+              max={fullBusdBalance}
+              symbol="BUSD"
+              inputTitle="buy"
+            />
+            {isApproved ? (<Button
+              variant="primary"
+              mt="20px"
+              width="100%"
+              disabled={valBusd === '' || busdPending}
+              onClick={handleBuyByBusd}
+            >
+              {bnbPending ? 'Buying...' : 'Buy presale'}
+            </Button>) : (<Button
+              variant="primary"
+              mt="20px"
+              width="100%"
+              disabled={requestedApproval}
+              onClick={handleApprove}
+            >
+              Approve Contract
+            </Button>)}
+          </FCard>
         </FlexLayout>
-        <Image
-          mx="auto"
-          mt="12px"
-          src="/images/pool-syrup-cow.svg"
-          alt="Pancake illustration"
-          width={192}
-          height={184.5}
-        />
       </Page>
     </>
   )
