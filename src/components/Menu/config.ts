@@ -120,28 +120,28 @@ const config: MenuEntry[] = [
     label: 'More',
     icon: 'MoreIcon',
     href: '/',
-    // items: [
-    //   {
-    //     label: 'Contact',
-    //     href: 'https://docs.cowswap.finance/contact-us',
-    //   },
-    //   {
-    //     label: 'Voting',
-    //     href: 'https://voting.cowswap.finance',
-    //   },
-    //   {
-    //     label: 'Github',
-    //     href: 'https://github.com/cowswap',
-    //   },
-    //   {
-    //     label: 'Docs',
-    //     href: 'https://docs.cowswap.finance',
-    //   },
-    //   {
-    //     label: 'Blog',
-    //     href: 'https://cowswap.medium.com',
-    //   },
-    // ],
+    items: [
+      // {
+      //   label: 'Contact',
+      //   href: 'https://docs.cowswap.finance/contact-us',
+      // },
+      // {
+      //   label: 'Voting',
+      //   href: 'https://voting.cowswap.finance',
+      // },
+      {
+        label: 'Github',
+        href: 'https://github.com/cowswap',
+      },
+      {
+        label: 'Docs',
+        href: 'https://docs.cowswap.finance',
+      },
+      // {
+      //   label: 'Blog',
+      //   href: 'https://cowswap.medium.com',
+      // },
+    ],
   },
 ]
 

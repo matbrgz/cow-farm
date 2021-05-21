@@ -62,6 +62,7 @@ const Presale: React.FC = () => {
   const [remainingToken, setRemainingToken] = useState('0')
   const [bnbPending, setBnbPending] = useState(false)
   const [busdPending, setBusdPending] = useState(false)
+  const [claiming, setClaiming] = useState(false)
   const { balance: bnbBalance } = useGetBnbBalance()
   const busdBalance = useTokenBalance(getAddress(tokens.busd.address))
 
@@ -152,10 +153,7 @@ const Presale: React.FC = () => {
     setBusdPending(true)
     try {
       const value = new BigNumber(valBusd).times(10**18)
-      // console.log({
-      //   value,
-      //   valBusd
-      // })
+
       await presaleContract.methods
         .buyByBUSD(value)
         .send({ from: account, gas: 200000 })
@@ -195,6 +193,26 @@ const Presale: React.FC = () => {
     
   }, [valBnb, account, presaleContract, presaleAddress, toastError, toastSuccess])
 
+  const handleClaimAirdrop = useCallback(async() => {
+    setClaiming(true)
+    try {
+      await presaleContract.methods
+        .claim()
+        .send({ from: account, gas: 200000, to: presaleAddress })
+        .on('transactionHash', (tx) => {
+          return tx.transactionHash
+        })
+      toastSuccess(
+        'Airdrop',
+        'Your GOUDA have been transferred to your wallet!',
+      )
+      setClaiming(false)
+    } catch (e) {
+      toastError('Canceled', 'Please try again and confirm the transaction.')
+      setClaiming(false)
+    }
+  }, [presaleContract, account, toastError, toastSuccess, presaleAddress])
+
   return (
     <>
       <Page>
@@ -203,6 +221,15 @@ const Presale: React.FC = () => {
             <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
               Presale
             </Heading>
+            <Button
+              variant="primary"
+              mt="20px"
+              width="100%"
+              disabled={claiming}
+              onClick={handleClaimAirdrop}
+            >
+              {!claiming ? 'Claim Airdrop' : 'Claiming ...' }
+            </Button>
             <Text textAlign="left" fontSize="20px" color="textSubtle">Total:</Text>
             <Text textAlign="left" fontSize="20px" color="text">3.000.000 Gouda</Text>
             <Text textAlign="left" fontSize="20px" color="textSubtle">Remaining:</Text>
