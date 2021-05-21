@@ -36,7 +36,7 @@ const StyledTokenInput = styled.div<InputProps>`
 const StyledInput = styled(Input)`
   box-shadow: none;
   width: 100px;
-  padding: 0;
+  padding: 0 5px;
 `
 
 const PresaleInput: React.FC<ModalInputProps> = ({

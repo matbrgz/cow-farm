@@ -35,6 +35,16 @@ const farms: FarmConfig[] = [
     token: tokens.busd,
     quoteToken: tokens.wbnb,
   },
+  {
+    pid: 6,
+    lpSymbol: 'GOUDA-BUSD LP',
+    lpAddresses: {
+      97: '0xB8680BC4f90058faF7617c59eEe8523F0fd53f38',
+      56: '0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16',
+    },
+    token: tokens.cow,
+    quoteToken: tokens.busd,
+  },
 ]
 
 export default farms

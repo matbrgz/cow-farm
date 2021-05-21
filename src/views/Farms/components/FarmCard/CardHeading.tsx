@@ -16,7 +16,7 @@ const Wrapper = styled(Flex)`
     margin-right: 4px;
   }
   h2 {
-    font-size: 32px !important
+    font-size: 25px !important
   }
 `
 

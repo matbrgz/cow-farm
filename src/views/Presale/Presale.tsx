@@ -152,10 +152,10 @@ const Presale: React.FC = () => {
     setBusdPending(true)
     try {
       const value = new BigNumber(valBusd).times(10**18)
-      console.log({
-        value,
-        valBusd
-      })
+      // console.log({
+      //   value,
+      //   valBusd
+      // })
       await presaleContract.methods
         .buyByBUSD(value)
         .send({ from: account, gas: 200000 })
