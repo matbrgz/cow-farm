@@ -23,7 +23,6 @@ import bnbIcon from './icons/BNB.svg'
 import busdIcon from './icons/BUSD.svg'
 import presaleBackground from './images/presale.svg'
 
-
 const FCard = styled.div`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
@@ -48,6 +47,24 @@ const CardHeading = styled(Flex)`
   h2 {
     font-size: 32px !important
   }
+`
+const HeadingLayoutStyled = styled(Flex)`
+  display: flex;
+`
+
+const BottomStyled = styled(Flex)`
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: rgb(239, 244, 245);
+  padding: 16px;
 `
 
 const Presale: React.FC = () => {
@@ -216,36 +233,25 @@ const Presale: React.FC = () => {
   return (
     <>
       <Page>
-        <FlexLayout>
-          <div>
+        <HeadingLayoutStyled>
+          <div style={{ width: '60%' }}>
             <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
               Presale
             </Heading>
-            <Button
-              variant="primary"
-              mt="20px"
-              width="100%"
-              disabled={claiming}
-              onClick={handleClaimAirdrop}
-            >
-              {!claiming ? 'Claim Airdrop' : 'Claiming ...' }
-            </Button>
-            <Text textAlign="left" fontSize="20px" color="textSubtle">Total:</Text>
-            <Text textAlign="left" fontSize="20px" color="text">3.000.000 Gouda</Text>
-            <Text textAlign="left" fontSize="20px" color="textSubtle">Remaining:</Text>
-            <Text textAlign="left" fontSize="20px" color="text">{remainingToken} Gouda</Text>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "center" }}>Total: <span style={{ fontSize: 30 }}>3.000.000</span> Gouda</p>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "center" }}>Remaining: <span style={{ fontSize: 30 }}>{remainingToken}</span> Gouda</p>
           </div>
-          <div>
+          <div style={{ width: '40%' }}>
             <Image
               mx="auto"
               mt="12px"
               src={presaleBackground}
               alt="Pancake illustration"
-              width={192}
-              height={184.5}
+              width={263}
+              height={200}
             />
           </div>
-        </FlexLayout>
+        </HeadingLayoutStyled>
         <FlexLayout>
           <FCard>
             <CardHeading>
@@ -311,6 +317,17 @@ const Presale: React.FC = () => {
           </FCard>
         </FlexLayout>
       </Page>
+      <BottomStyled>
+        <Text color="textSubtle" mr={20} >News: </Text>
+        <Button
+          variant="primary"
+          // width="100%"
+          disabled={claiming}
+          onClick={handleClaimAirdrop}
+        >
+          {!claiming ? 'Claim Airdrop' : 'Claiming ...' }
+        </Button>
+      </BottomStyled>
     </>
   )
 }
