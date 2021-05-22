@@ -184,10 +184,10 @@ export const useGetApiPrice = (address: string) => {
   return prices[address.toLowerCase()]
 }
 
-export const usePriceBnbBusd = (): BigNumber => {
-  const bnbBusdFarm = useFarmFromPid(2)
-  return bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
-}
+// export const usePriceBnbBusd = (): BigNumber => {
+//   const bnbBusdFarm = useFarmFromPid(2)
+//   return bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
+// }
 
 export const usePriceCakeBusd = (): BigNumber => {
   const pid = 6

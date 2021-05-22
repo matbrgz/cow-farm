@@ -15,6 +15,7 @@ import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import tokens from 'config/constants/tokens'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import PresaleInput from './components/PresaleInput'
 
 import goudaIcon from './icons/GOUDA.svg'
@@ -48,9 +49,6 @@ const CardHeading = styled(Flex)`
     font-size: 32px !important
   }
 `
-const HeadingLayoutStyled = styled(Flex)`
-  display: flex;
-`
 
 const BottomStyled = styled(Flex)`
   position: fixed;
@@ -76,6 +74,8 @@ const Presale: React.FC = () => {
   const { account } = useWeb3React()
   const [valBnb, setValBnb] = useState('')
   const [valBusd, setValBusd] = useState('')
+  const [estimatedBnbToGouda, setEstimatedBnbToGouda] = useState('0,00')
+  const [estimatedBusdToGouda, setEstimatedBusdToGouda] = useState('0,00')
   const [remainingToken, setRemainingToken] = useState('0')
   const [bnbPending, setBnbPending] = useState(false)
   const [busdPending, setBusdPending] = useState(false)
@@ -128,16 +128,47 @@ const Presale: React.FC = () => {
   }, [bnbBalance])
 
   useEffect(() => {
+    const value = new BigNumber(valBnb === '' ? '0' : valBnb)
+
+    presaleContract.methods.BNB2GOUDA(value)
+      .call()
+      .then(gouda => setEstimatedBnbToGouda(new BigNumber(gouda)
+        .decimalPlaces(0).toFormat({
+          decimalSeparator: ',',
+          groupSeparator: '.',
+          groupSize: 3,
+          secondaryGroupSize: 3
+        })
+        .toString()))
+  }, [valBnb, presaleContract])
+
+  useEffect(() => {
+    const value = new BigNumber(valBusd === '' ? '0' : valBusd)
+
+    presaleContract.methods.BUSD2Gouda(value)
+      .call()
+      .then(gouda => setEstimatedBusdToGouda(new BigNumber(gouda)
+        .decimalPlaces(0).toFormat({
+          decimalSeparator: ',',
+          groupSeparator: '.',
+          groupSize: 3,
+          secondaryGroupSize: 3
+        })
+        .toString()))
+  }, [valBusd, presaleContract])
+
+  useEffect(() => {
     presaleContract.methods.getRemainingToken()
-    .call()
-    .then(value => setRemainingToken(new BigNumber(value)
-    .div(10**18)
-    .decimalPlaces(2).toFormat({
-      decimalSeparator: ',',
-      groupSeparator: '.',
-      groupSize: 3,
-      secondaryGroupSize: 3
-    }).toString()))
+      .call()
+      .then(value => setRemainingToken(new BigNumber(value)
+        .div(DEFAULT_TOKEN_DECIMAL)
+        .decimalPlaces(0).toFormat({
+          decimalSeparator: ',',
+          groupSeparator: '.',
+          groupSize: 3,
+          secondaryGroupSize: 3
+        })
+        .toString()))
   }, [currentBlock, presaleContract])
 
   const handleSelectMaxBusd = useCallback(() => {
@@ -169,7 +200,7 @@ const Presale: React.FC = () => {
   const handleBuyByBusd = useCallback(async() => {
     setBusdPending(true)
     try {
-      const value = new BigNumber(valBusd).times(10**18)
+      const value = new BigNumber(valBusd).times(DEFAULT_TOKEN_DECIMAL)
 
       await presaleContract.methods
         .buyByBUSD(value)
@@ -194,7 +225,7 @@ const Presale: React.FC = () => {
     try {
       await presaleContract.methods
         .buy()
-        .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(10**18).toString() })
+        .send({ from: account, gas: 200000, to: presaleAddress, value: new BigNumber(valBnb).times(DEFAULT_TOKEN_DECIMAL).toString() })
         .on('transactionHash', (tx) => {
           return tx.transactionHash
         })
@@ -233,15 +264,15 @@ const Presale: React.FC = () => {
   return (
     <>
       <Page>
-        <HeadingLayoutStyled>
-          <div style={{ width: '60%' }}>
-            <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
+        <FlexLayout>
+          <div>
+            <Heading as="h1" textAlign="left" size="xl" mb="24px" color="text">
               Presale
             </Heading>
-            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "center" }}>Total: <span style={{ fontSize: 30 }}>3.000.000</span> Gouda</p>
-            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "center" }}>Remaining: <span style={{ fontSize: 30 }}>{remainingToken}</span> Gouda</p>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>Total: <span style={{ fontSize: 35 }}>3.000.000</span> Gouda</p>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>Remaining: <span style={{ fontSize: 35 }}>{remainingToken}</span> Gouda</p>
           </div>
-          <div style={{ width: '40%' }}>
+          <div>
             <Image
               mx="auto"
               mt="12px"
@@ -251,7 +282,7 @@ const Presale: React.FC = () => {
               height={200}
             />
           </div>
-        </HeadingLayoutStyled>
+        </FlexLayout>
         <FlexLayout>
           <FCard>
             <CardHeading>
@@ -270,6 +301,7 @@ const Presale: React.FC = () => {
               symbol="BNB"
               inputTitle="buy"
             />
+            <Text textAlign="left" color="textSubtle" mr={20} >~{estimatedBnbToGouda} Gouda</Text>
             <Button
               variant="primary"
               mt="20px"
@@ -297,6 +329,7 @@ const Presale: React.FC = () => {
               symbol="BUSD"
               inputTitle="buy"
             />
+            <Text textAlign="left" color="textSubtle" mr={20} >~{estimatedBusdToGouda} Gouda</Text>
             {isApproved ? (<Button
               variant="primary"
               mt="20px"
@@ -320,6 +353,7 @@ const Presale: React.FC = () => {
       <BottomStyled>
         <Text color="textSubtle" mr={20} >News: </Text>
         <Button
+          scale="sm"
           variant="primary"
           // width="100%"
           disabled={claiming}

@@ -26,16 +26,6 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
   },
   {
-    pid: 2,
-    lpSymbol: 'BUSD-BNB LP',
-    lpAddresses: {
-      97: '0x0f8B25d01b2498eE3a2EaFdAEe64d0A0797607df',
-      56: '0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16',
-    },
-    token: tokens.busd,
-    quoteToken: tokens.wbnb,
-  },
-  {
     pid: 6,
     lpSymbol: 'GOUDA-BUSD LP',
     lpAddresses: {
