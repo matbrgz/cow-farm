@@ -10,12 +10,14 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { getPresaleContract, getBep20Contract } from 'utils/contractHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
+import multicall from 'utils/multicall'
 import { getPresaleAddress, getAddress } from 'utils/addressHelpers'
 import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import tokens from 'config/constants/tokens'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import presaleAbi from 'config/abi/presale.json'
 import PresaleInput from './components/PresaleInput'
 
 import goudaIcon from './icons/GOUDA.svg'
@@ -76,6 +78,7 @@ const Presale: React.FC = () => {
   const [valBusd, setValBusd] = useState('')
   const [estimatedBnbToGouda, setEstimatedBnbToGouda] = useState('0,00')
   const [estimatedBusdToGouda, setEstimatedBusdToGouda] = useState('0,00')
+  const [isClaimed, setIsClaimed] = useState(false)
   const [remainingToken, setRemainingToken] = useState('0')
   const [bnbPending, setBnbPending] = useState(false)
   const [busdPending, setBusdPending] = useState(false)
@@ -158,18 +161,49 @@ const Presale: React.FC = () => {
   }, [valBusd, presaleContract])
 
   useEffect(() => {
-    presaleContract.methods.getRemainingToken()
-      .call()
-      .then(value => setRemainingToken(new BigNumber(value)
-        .div(DEFAULT_TOKEN_DECIMAL)
-        .decimalPlaces(0).toFormat({
-          decimalSeparator: ',',
-          groupSeparator: '.',
-          groupSize: 3,
-          secondaryGroupSize: 3
-        })
-        .toString()))
-  }, [currentBlock, presaleContract])
+    try {
+      multicall(presaleAbi, [
+        {
+          address: presaleAddress,
+          name: 'getRemainingToken',
+          params: [],
+        },
+        {
+          address: presaleAddress,
+          name: 'remainAirdrop',
+          params: [],
+        }
+      ]).then(([presaleLeft, airdropLeft]) => {
+        const tokenLeft = new BigNumber(presaleLeft)
+          .minus(new BigNumber(airdropLeft))
+          .div(DEFAULT_TOKEN_DECIMAL)
+          .decimalPlaces(0).toFormat({
+            decimalSeparator: ',',
+            groupSeparator: '.',
+            groupSize: 3,
+            secondaryGroupSize: 3
+          })
+          .toString()
+        setRemainingToken(tokenLeft)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    
+  }, [currentBlock, presaleContract, account, presaleAddress])
+
+  useEffect(() => {
+    try {
+      if (account) {
+        presaleContract.methods
+          .claimers(account)
+          .call()
+          .then(setIsClaimed)
+      }
+    } catch(error) {
+      console.error(error)
+    }
+  }, [presaleContract, account, currentBlock])
 
   const handleSelectMaxBusd = useCallback(() => {
     setValBusd(fullBusdBalance)
@@ -355,8 +389,7 @@ const Presale: React.FC = () => {
         <Button
           scale="sm"
           variant="primary"
-          // width="100%"
-          disabled={claiming}
+          disabled={isClaimed || claiming}
           onClick={handleClaimAirdrop}
         >
           {!claiming ? 'Claim Airdrop' : 'Claiming ...' }

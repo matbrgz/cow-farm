@@ -88,6 +88,9 @@ const Home: React.FC = () => {
         <TwitterTimelineEmbed
             sourceType="profile"
             screenName="cowswap_finance"
+            noFooter
+            noHeader
+            placeholder="Loading..."
             options={{height: 600, width: 500}}
           />
       </Hero>
