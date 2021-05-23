@@ -136,18 +136,22 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBnb === '' ? '0' : valBnb)
+      const value = new BigNumber(valBnb === '' ? '0' : valBnb).times(DEFAULT_TOKEN_DECIMAL).toString()
 
       presaleContract.methods.BNB2GOUDA(value)
         .call()
-        .then(gouda => setEstimatedBnbToGouda(new BigNumber(gouda)
+        .then(gouda => {
+          const result = new BigNumber(gouda)
+          .div(DEFAULT_TOKEN_DECIMAL)
           .decimalPlaces(0).toFormat({
             decimalSeparator: ',',
             groupSeparator: '.',
             groupSize: 3,
             secondaryGroupSize: 3
           })
-          .toString()))
+          .toString()
+          setEstimatedBnbToGouda(result)
+        })
     } catch (error) {
       console.error(error)
     }
@@ -155,18 +159,22 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBusd === '' ? '0' : valBusd)
+      const value = new BigNumber(valBusd === '' ? 0 : Number(valBusd)).times(DEFAULT_TOKEN_DECIMAL).toString()
 
       presaleContract.methods.BUSD2Gouda(value)
         .call()
-        .then(gouda => setEstimatedBusdToGouda(new BigNumber(gouda)
+        .then(gouda => {
+          const result = new BigNumber(gouda)
+          .div(DEFAULT_TOKEN_DECIMAL)
           .decimalPlaces(0).toFormat({
             decimalSeparator: ',',
             groupSeparator: '.',
             groupSize: 3,
             secondaryGroupSize: 3
           })
-          .toString()))
+          .toString()
+          setEstimatedBusdToGouda(result)
+        })
     } catch (error) {
       console.error(error)
     }
@@ -246,7 +254,7 @@ const Presale: React.FC = () => {
   const handleBuyByBusd = useCallback(async() => {
     setBusdPending(true)
     try {
-      const value = new BigNumber(valBusd).times(DEFAULT_TOKEN_DECIMAL)
+      const value = new BigNumber(valBusd).times(DEFAULT_TOKEN_DECIMAL).toString()
 
       await presaleContract.methods
         .buyByBUSD(value)
@@ -261,7 +269,7 @@ const Presale: React.FC = () => {
       setBusdPending(false)
     } catch (e) {
       toastError('Canceled', 'Please try again and confirm the transaction.')
-      setBnbPending(false)
+      setBusdPending(false)
     }
     
   }, [valBusd, account, presaleContract, toastError, toastSuccess])
