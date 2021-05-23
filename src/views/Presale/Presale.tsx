@@ -116,9 +116,13 @@ const Presale: React.FC = () => {
   }, [busdContract, account, presaleContract, presaleAddress])
 
   useEffect(() => {
-    if (account) {
-      busdContract.methods.allowance(account, presaleAddress).call()
-        .then(res => setAllowance(new BigNumber(res)))
+    try {
+      if (account) {
+        busdContract.methods.allowance(account, presaleAddress).call()
+          .then(res => setAllowance(new BigNumber(res)))
+      }
+    } catch (error) {
+      console.error(error)
     }
   }, [busdContract, presaleAddress, account])
 
@@ -131,33 +135,41 @@ const Presale: React.FC = () => {
   }, [bnbBalance])
 
   useEffect(() => {
-    const value = new BigNumber(valBnb === '' ? '0' : valBnb)
+    try {
+      const value = new BigNumber(valBnb === '' ? '0' : valBnb)
 
-    presaleContract.methods.BNB2GOUDA(value)
-      .call()
-      .then(gouda => setEstimatedBnbToGouda(new BigNumber(gouda)
-        .decimalPlaces(0).toFormat({
-          decimalSeparator: ',',
-          groupSeparator: '.',
-          groupSize: 3,
-          secondaryGroupSize: 3
-        })
-        .toString()))
+      presaleContract.methods.BNB2GOUDA(value)
+        .call()
+        .then(gouda => setEstimatedBnbToGouda(new BigNumber(gouda)
+          .decimalPlaces(0).toFormat({
+            decimalSeparator: ',',
+            groupSeparator: '.',
+            groupSize: 3,
+            secondaryGroupSize: 3
+          })
+          .toString()))
+    } catch (error) {
+      console.error(error)
+    }
   }, [valBnb, presaleContract])
 
   useEffect(() => {
-    const value = new BigNumber(valBusd === '' ? '0' : valBusd)
+    try {
+      const value = new BigNumber(valBusd === '' ? '0' : valBusd)
 
-    presaleContract.methods.BUSD2Gouda(value)
-      .call()
-      .then(gouda => setEstimatedBusdToGouda(new BigNumber(gouda)
-        .decimalPlaces(0).toFormat({
-          decimalSeparator: ',',
-          groupSeparator: '.',
-          groupSize: 3,
-          secondaryGroupSize: 3
-        })
-        .toString()))
+      presaleContract.methods.BUSD2Gouda(value)
+        .call()
+        .then(gouda => setEstimatedBusdToGouda(new BigNumber(gouda)
+          .decimalPlaces(0).toFormat({
+            decimalSeparator: ',',
+            groupSeparator: '.',
+            groupSize: 3,
+            secondaryGroupSize: 3
+          })
+          .toString()))
+    } catch (error) {
+      console.error(error)
+    }
   }, [valBusd, presaleContract])
 
   useEffect(() => {
