@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Heading, Text } from '@pancakeswap-libs/uikit'
+import { Heading, Text, LinkExternal, Flex } from '@cowswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import Page from 'components/layout/Page'
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
@@ -75,6 +75,21 @@ const Hero = styled.div`
 //   }
 // `
 
+const BottomStyled = styled(Flex)`
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: rgb(239, 244, 245);
+  padding: 16px;
+`
+
 const Home: React.FC = () => {
   const { t } = useTranslation()
 
@@ -91,7 +106,7 @@ const Home: React.FC = () => {
             noFooter
             noHeader
             placeholder="Loading..."
-            options={{height: 600, width: 500}}
+            options={{height: 400, width: 500}}
           />
       </Hero>
       {/* <div>
@@ -109,6 +124,10 @@ const Home: React.FC = () => {
           <TotalValueLockedCard />
         </Cards>
       </div> */}
+      <BottomStyled>
+        <LinkExternal mr='50px' color="text" href='/airdrop'>View Airdrop details</LinkExternal>
+        <LinkExternal color="text" href='/presale'>Presale</LinkExternal>
+      </BottomStyled>
     </Page>
   )
 }
