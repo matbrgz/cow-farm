@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Flex, Heading, Image, Text, Button } from '@cowswap/uikit'
+import { Flex, Heading, Image, Text, Button, MetamaskIcon } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -16,8 +16,9 @@ import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import tokens from 'config/constants/tokens'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BASE_URL } from 'config'
 import presaleAbi from 'config/abi/presale.json'
+import { registerToken } from 'utils/wallet'
 import PresaleInput from './components/PresaleInput'
 
 import goudaIcon from './icons/GOUDA.svg'
@@ -25,6 +26,8 @@ import arrowIcon from './icons/arrow.svg'
 import bnbIcon from './icons/BNB.svg'
 import busdIcon from './icons/BUSD.svg'
 import presaleBackground from './images/presale.svg'
+
+const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
 
 const FCard = styled.div`
   align-self: baseline;
@@ -85,6 +88,8 @@ const Presale: React.FC = () => {
   const [claiming, setClaiming] = useState(false)
   const { balance: bnbBalance } = useGetBnbBalance()
   const busdBalance = useTokenBalance(getAddress(tokens.busd.address))
+
+  const isMetaMaskInScope = !!(window as WindowChain).ethereum?.isMetaMask
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
   const presaleAddress = getPresaleAddress()
@@ -266,6 +271,7 @@ const Presale: React.FC = () => {
         'Buy Presale',
         'Your GOUDA have been transferred to your wallet!',
       )
+      setValBusd('')
       setBusdPending(false)
     } catch (e) {
       toastError('Canceled', 'Please try again and confirm the transaction.')
@@ -287,6 +293,7 @@ const Presale: React.FC = () => {
         'Buy Presale',
         'Your GOUDA have been transferred to your wallet!',
       )
+      setValBnb('')
       setBnbPending(false)
     } catch (e) {
       toastError('Canceled', 'Please try again and confirm the transaction.')
@@ -315,6 +322,16 @@ const Presale: React.FC = () => {
     }
   }, [presaleContract, account, toastError, toastSuccess, presaleAddress])
 
+  const claimAction = useMemo(() => {
+    if (isClaimed) {
+      return 'Claimed Airdrop'
+    }
+    if (claiming) {
+      return 'Claiming ...'
+    }
+    return 'Claim Airdrop'
+  }, [isClaimed, claiming])
+
   return (
     <>
       <Page>
@@ -323,8 +340,26 @@ const Presale: React.FC = () => {
             <Heading as="h1" textAlign="left" size="xl" mb="24px" color="text">
               Presale
             </Heading>
-            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>Total: <span style={{ fontSize: 35 }}>3.000.000</span> Gouda</p>
-            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>Remaining: <span style={{ fontSize: 35 }}>{remainingToken}</span> Gouda</p>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>
+              Total: <span style={{ fontSize: 32 }}>3.000.000</span> Gouda
+            </p>
+            <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>
+              Remaining: <span style={{ fontSize: 32 }}>{remainingToken}</span> Gouda
+            </p>
+            {account && isMetaMaskInScope && (
+              <Flex justifyContent="flex-start" style={{
+                cursor: 'pointer',
+                marginTop: 15
+              }} onClick={() => registerToken(presaleAddress, 'GOUDA', 18, goudaSrc)}>
+                <Text
+                  color="textSubtle"
+                  small
+                >
+                  Add GOUDA to Metamask
+                </Text>
+                <MetamaskIcon ml="4px" />
+              </Flex>
+            )}
           </div>
           <div>
             <Image
@@ -412,7 +447,7 @@ const Presale: React.FC = () => {
           disabled={isClaimed || claiming}
           onClick={handleClaimAirdrop}
         >
-          {!claiming ? 'Claim Airdrop' : 'Claiming ...' }
+          {claimAction}
         </Button>
       </BottomStyled>
     </>

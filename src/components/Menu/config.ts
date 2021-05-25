@@ -1,4 +1,7 @@
 import { MenuEntry } from '@pancakeswap-libs/uikit'
+import tokens from 'config/constants/tokens'
+import { BASE_BSC_SCAN_URL } from 'config'
+import { getAddress } from 'utils/addressHelpers'
 
 const config: MenuEntry[] = [
   {
@@ -137,10 +140,10 @@ const config: MenuEntry[] = [
         label: 'Docs',
         href: 'https://docs.cowswap.finance',
       },
-      // {
-      //   label: 'Blog',
-      //   href: 'https://cowswap.medium.com',
-      // },
+      {
+        label: 'Gouda Contract',
+        href: `${BASE_BSC_SCAN_URL}/address/${getAddress(tokens.cow.address)}`,
+      },
     ],
   },
 ]
