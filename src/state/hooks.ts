@@ -190,7 +190,7 @@ export const useGetApiPrice = (address: string) => {
 // }
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const pid = 6
+  const pid = 2
   const farm = useFarmFromPid(pid)
   return farm.tokenPriceVsQuote ? new BigNumber(0.5) : BIG_ZERO
 }
