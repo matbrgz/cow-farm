@@ -357,12 +357,12 @@ const Presale: React.FC = () => {
             <p style={{ fontSize: 20, color: '#E67B56', marginTop: 25, textAlign: "left", borderTop: "1px solid #E67B56", paddingTop: 15 }}>
               Your locked: <span style={{ fontSize: 30 }}>{yourGouda}</span> Gouda
             </p>
-            <div style={{ background: '#EBEBEB', borderRadius: 12, padding: 15, marginTop: 15 }}>
-              <p style={{ fontSize: 13, color: '#1061FF', textAlign: "center" }}>
-              Unlock time remaining:
+            <div style={{ background: '#EBEBEB', borderRadius: 12, padding: 8, marginTop: 15, width: '75%' }}>
+              <p style={{ fontSize: 13, color: '#1DA1F2', textAlign: "center" }}>
+                Unlock time remaining:
               </p>
-              <p style={{ fontSize: 13, color: '#1061FF', textAlign: "center", marginTop: 10 }}>
-              <span style={{ fontSize: 14 }}>{countdown}</span>
+              <p style={{ fontSize: 13, color: '#1DA1F2', textAlign: "center", marginTop: 6 }}>
+                {countdown}
               </p>
             </div>
             {account && isMetaMaskInScope && (
