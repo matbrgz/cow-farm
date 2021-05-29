@@ -113,7 +113,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
     tokenAddress: farm.token.address,
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-  const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
+  // const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
 
   return (
     <FCard>

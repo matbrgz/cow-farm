@@ -29,6 +29,22 @@ import presaleBackground from './images/presale.svg'
 
 const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
 
+const secondsToTime = (input: number | undefined) => {
+  if(!input) {
+    return 'N/A'
+  }
+
+  let seconds = input
+
+  const days = Math.floor(seconds / (3600 * 24));
+  seconds -= days * 3600 * 24;
+  const hrs = Math.floor(seconds / 3600);
+  seconds -= hrs * 3600;
+  const mnts = Math.floor(seconds / 60);
+  seconds -= mnts * 60;
+  return `${days} days, ${hrs}:${mnts}:${seconds}`;
+}
+
 const FCard = styled.div`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
@@ -81,7 +97,10 @@ const Presale: React.FC = () => {
   const [valBusd, setValBusd] = useState('')
   const [estimatedBnbToGouda, setEstimatedBnbToGouda] = useState('0,00')
   const [estimatedBusdToGouda, setEstimatedBusdToGouda] = useState('0,00')
+  const [countdown, setCountdown] = useState('00:00:00')
+  const [yourGouda, setYourGouda] = useState('0,00')
   const [isClaimed, setIsClaimed] = useState(false)
+  const [presaleToken, setPresaleToken] = useState('0')
   const [remainingToken, setRemainingToken] = useState('0')
   const [bnbPending, setBnbPending] = useState(false)
   const [busdPending, setBusdPending] = useState(false)
@@ -141,21 +160,12 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBnb === '' ? '0' : valBnb).times(DEFAULT_TOKEN_DECIMAL).toString()
+      const value = new BigNumber(valBnb === '' ? '0' : valBnb).toString()
 
       presaleContract.methods.BNB2GOUDA(value)
         .call()
         .then(gouda => {
-          const result = new BigNumber(gouda)
-          .div(DEFAULT_TOKEN_DECIMAL)
-          .decimalPlaces(0).toFormat({
-            decimalSeparator: ',',
-            groupSeparator: '.',
-            groupSize: 3,
-            secondaryGroupSize: 3
-          })
-          .toString()
-          setEstimatedBnbToGouda(result)
+          setEstimatedBnbToGouda(new BigNumber(gouda).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
         })
     } catch (error) {
       console.error(error)
@@ -164,21 +174,11 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBusd === '' ? 0 : Number(valBusd)).times(DEFAULT_TOKEN_DECIMAL).toString()
-
+      const value = new BigNumber(valBusd === '' ? 0 : Number(valBusd)).toString()
       presaleContract.methods.BUSD2Gouda(value)
         .call()
         .then(gouda => {
-          const result = new BigNumber(gouda)
-          .div(DEFAULT_TOKEN_DECIMAL)
-          .decimalPlaces(0).toFormat({
-            decimalSeparator: ',',
-            groupSeparator: '.',
-            groupSize: 3,
-            secondaryGroupSize: 3
-          })
-          .toString()
-          setEstimatedBusdToGouda(result)
+          setEstimatedBusdToGouda(new BigNumber(gouda).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
         })
     } catch (error) {
       console.error(error)
@@ -187,30 +187,38 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      multicall(presaleAbi, [
-        {
-          address: presaleAddress,
-          name: 'getRemainingToken',
-          params: [],
-        },
-        {
-          address: presaleAddress,
-          name: 'remainAirdrop',
-          params: [],
-        }
-      ]).then(([presaleLeft, airdropLeft]) => {
-        const tokenLeft = new BigNumber(presaleLeft)
-          .minus(new BigNumber(airdropLeft))
-          .div(DEFAULT_TOKEN_DECIMAL)
-          .decimalPlaces(0).toFormat({
-            decimalSeparator: ',',
-            groupSeparator: '.',
-            groupSize: 3,
-            secondaryGroupSize: 3
-          })
-          .toString()
-        setRemainingToken(tokenLeft)
-      })
+      if (account) {
+        multicall(presaleAbi, [
+          {
+            address: presaleAddress,
+            name: 'getRemainingToken',
+            params: [],
+          },
+          {
+            address: presaleAddress,
+            name: 'presaleLocking',
+            params: [],
+          },
+          {
+            address: presaleAddress,
+            name: 'buyers',
+            params: [account],
+          },
+          {
+            address: presaleAddress,
+            name: 'unlockPresaleBlock',
+            params: [],
+          }
+        ]).then(([presaleTotal, presaleLocked, boughtGouda, blockToUnblock]) => {
+          const tokenLeft = new BigNumber(presaleTotal)
+            .minus(new BigNumber(presaleLocked)).div(DEFAULT_TOKEN_DECIMAL)
+  
+          setPresaleToken(new BigNumber(presaleTotal).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
+          setRemainingToken(tokenLeft.toNumber().toLocaleString('en-US', { maximumFractionDigits: 0 }))
+          setYourGouda(new BigNumber(boughtGouda).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
+          setCountdown(secondsToTime(new BigNumber(blockToUnblock).minus(currentBlock).toNumber() * 5))
+        })
+      }
     } catch (error) {
       console.error(error)
     }
@@ -341,11 +349,22 @@ const Presale: React.FC = () => {
               Presale
             </Heading>
             <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>
-              Total: <span style={{ fontSize: 32 }}>3.000.000</span> Gouda
+              Total: <span style={{ fontSize: 30 }}>{presaleToken}</span> Gouda
             </p>
             <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>
-              Remaining: <span style={{ fontSize: 32 }}>{remainingToken}</span> Gouda
+              Remaining: <span style={{ fontSize: 30 }}>{remainingToken}</span> Gouda
             </p>
+            <p style={{ fontSize: 20, color: '#E67B56', marginTop: 25, textAlign: "left", borderTop: "1px solid #E67B56", paddingTop: 15 }}>
+              Your locked: <span style={{ fontSize: 30 }}>{yourGouda}</span> Gouda
+            </p>
+            <div style={{ background: '#EBEBEB', borderRadius: 12, padding: 15, marginTop: 15 }}>
+              <p style={{ fontSize: 13, color: '#1061FF', textAlign: "center" }}>
+              Unlock time remaining:
+              </p>
+              <p style={{ fontSize: 13, color: '#1061FF', textAlign: "center", marginTop: 10 }}>
+              <span style={{ fontSize: 14 }}>{countdown}</span>
+              </p>
+            </div>
             {account && isMetaMaskInScope && (
               <Flex justifyContent="flex-start" style={{
                 cursor: 'pointer',
