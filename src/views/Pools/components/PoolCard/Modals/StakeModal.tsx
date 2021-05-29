@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
 import { useSousUnstake } from 'hooks/useUnstake'
+import { getAddress } from 'utils/addressHelpers'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -141,7 +142,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         {pendingTx ? t('Confirming') : t('Confirm')}
       </Button>
       {!isRemovingStake && (
-        <StyledLink external href={BASE_EXCHANGE_URL}>
+        <StyledLink external href={`${BASE_EXCHANGE_URL}/#/swap?outputCurrency=${getAddress(earningToken.address)}`}>
           <Button width="100%" mt="8px" variant="primary">
             {t('Get')} {stakingToken.symbol}
           </Button>
