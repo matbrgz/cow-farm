@@ -386,8 +386,8 @@ const Presale: React.FC = () => {
               mt="12px"
               src={presaleBackground}
               alt="Pancake illustration"
-              width={263}
-              height={200}
+              width={300}
+              height={230}
             />
           </div>
         </FlexLayout>
