@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Flex, Heading, Image, Text, Button, MetamaskIcon } from '@cowswap/uikit'
+import { Flex, Heading, Image, Text, Button, MetamaskIcon, LinkExternal } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -16,7 +16,7 @@ import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import tokens from 'config/constants/tokens'
-import { DEFAULT_TOKEN_DECIMAL, BASE_URL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BASE_URL, BASE_BSC_SCAN_URL } from 'config'
 import presaleAbi from 'config/abi/presale.json'
 import { registerToken } from 'utils/wallet'
 import PresaleInput from './components/PresaleInput'
@@ -353,6 +353,9 @@ const Presale: React.FC = () => {
             <Heading as="h1" textAlign="left" size="xl" mb="24px" color="text">
               Presale
             </Heading>
+            <LinkExternal style={{ color: '#E67B56' }} href={`${BASE_BSC_SCAN_URL}/address/${getAddress(tokens.cow.address)}`}>
+              Gouda address
+            </LinkExternal>
             <p style={{ fontSize: 20, color: '#323063', marginTop: 15, textAlign: "left" }}>
               Total: <span style={{ fontSize: 30 }}>{presaleToken}</span> Gouda
             </p>
