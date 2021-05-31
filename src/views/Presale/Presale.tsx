@@ -67,7 +67,7 @@ const CardHeading = styled(Flex)`
     margin-right: 4px;
   }
   h2 {
-    font-size: 32px !important
+    font-size: 31px !important
   }
 `
 
@@ -160,12 +160,12 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBnb === '' ? '0' : valBnb).toString()
+      const value = new BigNumber(valBnb === '' ? '0' : valBnb).times(DEFAULT_TOKEN_DECIMAL).toString()
 
       presaleContract.methods.BNB2GOUDA(value)
         .call()
         .then(gouda => {
-          setEstimatedBnbToGouda(new BigNumber(gouda).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
+          setEstimatedBnbToGouda(new BigNumber(gouda).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
         })
     } catch (error) {
       console.error(error)
@@ -174,11 +174,11 @@ const Presale: React.FC = () => {
 
   useEffect(() => {
     try {
-      const value = new BigNumber(valBusd === '' ? 0 : Number(valBusd)).toString()
+      const value = new BigNumber(valBusd === '' ? 0 : Number(valBusd)).times(DEFAULT_TOKEN_DECIMAL).toString()
       presaleContract.methods.BUSD2Gouda(value)
         .call()
         .then(gouda => {
-          setEstimatedBusdToGouda(new BigNumber(gouda).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
+          setEstimatedBusdToGouda(new BigNumber(gouda).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
         })
     } catch (error) {
       console.error(error)
@@ -201,6 +201,11 @@ const Presale: React.FC = () => {
           },
           {
             address: presaleAddress,
+            name: 'remainAirdrop',
+            params: [],
+          },
+          {
+            address: presaleAddress,
             name: 'buyers',
             params: [account],
           },
@@ -209,11 +214,11 @@ const Presale: React.FC = () => {
             name: 'unlockPresaleBlock',
             params: [],
           }
-        ]).then(([presaleTotal, presaleLocked, boughtGouda, blockToUnblock]) => {
+        ]).then(([presaleTotal, presaleLocked, remainAirdrop, boughtGouda, blockToUnblock]) => {
           const tokenLeft = new BigNumber(presaleTotal)
-            .minus(new BigNumber(presaleLocked)).div(DEFAULT_TOKEN_DECIMAL)
+            .minus(new BigNumber(presaleLocked)).minus(new BigNumber(remainAirdrop)).div(DEFAULT_TOKEN_DECIMAL)
   
-          setPresaleToken(new BigNumber(presaleTotal).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
+          setPresaleToken(new BigNumber(presaleTotal).minus(new BigNumber(remainAirdrop)).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
           setRemainingToken(tokenLeft.toNumber().toLocaleString('en-US', { maximumFractionDigits: 0 }))
           setYourGouda(new BigNumber(boughtGouda).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
           setCountdown(secondsToTime(new BigNumber(blockToUnblock).minus(currentBlock).toNumber() * 5))
