@@ -1,7 +1,7 @@
 export default {
   presale: {
     97: '0x8214933E32EaAbB016BE30A1809AA419537fD1cF',
-    56: '',
+    56: '0x14B06bF2C5B0AFd259c47c4be39cB9368ef0be3f',
   },
   masterChef: {
     97: '0xf2811d44770a10b0ab717008835192c41a8495f1',

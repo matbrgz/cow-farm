@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Heading, Text } from '@cowswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import Page from 'components/layout/Page'
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
+import { TwitterTimelineEmbed, TwitterFollowButton } from 'react-twitter-embed';
 // import FarmStakingCard from 'views/Home/components/FarmStakingCard'
 // import LotteryCard from 'views/Home/components/LotteryCard'
 // import CakeStats from 'views/Home/components/CakeStats'
@@ -29,6 +29,11 @@ const Hero = styled.div`
     height: auto;
     padding-top: 0;
   }
+`
+
+const ShareBtnStyled = styled.div`
+  margin-top: 15px;
+  margin-bottom: 15px
 `
 
 // const Cards = styled(BaseLayout)`
@@ -91,8 +96,11 @@ const Home: React.FC = () => {
             noFooter
             noHeader
             placeholder="Loading..."
-            options={{height: 400, width: 500}}
+            options={{ height: 450 }}
           />
+          <ShareBtnStyled>
+            <TwitterFollowButton screenName="cowswap_finance" options={{size: 'large'}} />
+          </ShareBtnStyled>
       </Hero>
       {/* <div>
         <Cards>

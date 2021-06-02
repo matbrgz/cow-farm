@@ -9,42 +9,51 @@ const config: MenuEntry[] = [
     icon: 'HomeIcon',
     href: '/',
   },
-  {
-    label: 'Airdrop',
-    icon: 'AirdropIcon',
-    href: '/airdrop',
-  },
-  {
-    label: 'Presale',
-    icon: 'PresaleIcon',
-    href: '/presale',
-  },
+  // {
+  //   label: 'Airdrop',
+  //   icon: 'AirdropIcon',
+  //   href: '/airdrop',
+  // },
+  // {
+  //   label: 'Presale',
+  //   icon: 'PresaleIcon',
+  //   href: '/presale',
+  // },
   {
     label: 'Trade',
     icon: 'TradeIcon',
     items: [
       {
         label: 'Exchange',
-        href: 'https://exchange.cowswap.finance/#/swap',
+        href: '/',
+        // href: 'https://exchange.cowswap.finance/#/swap',
       },
       {
         label: 'Liquidity',
-        href: 'https://exchange.cowswap.finance/#/pool',
+        href: '/',
+        // href: 'https://exchange.cowswap.finance/#/pool',
       },
     ],
   },
   {
     label: 'Farms',
     icon: 'FarmIcon',
-    href: '/farms',
+    href: '/',
+    // href: '/farms',
     status: {
-      color: "failure", text: "LIVE"
-    }
+      text: 'COMMING',
+      color: 'warning',
+    },
   },
   {
     label: 'Pools',
     icon: 'PoolIcon',
-    href: '/pools',
+    href: '/',
+    // href: '/pools',
+    status: {
+      text: 'COMMING',
+      color: 'warning',
+    },
   },
   // {
   //   label: 'Prediction',
