@@ -1,19 +1,19 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Flex, Heading, Image, Text, Button, AutoRenewIcon } from '@cowswap/uikit'
+import { Flex, Heading, Image, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import { useWeb3React } from '@web3-react/core'
 import { getLuckyDrawContract } from 'utils/contractHelpers'
 import multicall from 'utils/multicall'
-import { getLuckyDrawAddress, getAddress } from 'utils/addressHelpers'
+import { getLuckyDrawAddress } from 'utils/addressHelpers'
 import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import { BASE_URL } from 'config'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
 
-const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
+// const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
 
 const FCard = styled.div`
   align-self: baseline;
@@ -96,7 +96,6 @@ const LuckyDraw: React.FC = () => {
           })
       }
     } catch (error) {
-      console.error(error)
     }
   }, [luckyDrawContract, account, currentBlock])
 
@@ -162,6 +161,25 @@ const LuckyDraw: React.FC = () => {
       })
     }
   }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading])
+
+  const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
+    {winners['10'].length ? winners['10'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+  </Modal>)
+
+  const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
+    {winners['100'].length ? winners['100'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+  </Modal>)
+
+  const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
+    {winners['500'].length ? winners['500'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+  </Modal>)
+
+  const factoryModal = {
+    '10': onPresentWon10Modal,
+    '100': onPresentWon100Modal,
+    '500': onPresentWon500Modal,
+  }
+
   return (
     <Page>
       <FlexLayout>
@@ -169,18 +187,6 @@ const LuckyDraw: React.FC = () => {
           Lucky draw
         </Heading>
       </FlexLayout>
-      <div>
-        <Text mr={15} mt={15}>Won 10 Gouda: </Text>
-        {winners['10'].length ? winners['10'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">[Waiting ...]</Text>}
-      </div>
-      <div>
-        <Text mr={15} mt={15}>Won 100 Gouda: </Text>
-        {winners['100'].length ? winners['100'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">[Waiting ...]</Text>}
-      </div>
-      <div>
-        <Text mr={15} mt={15}>Won 500 Gouda: </Text>
-        {winners['500'].length ? winners['500'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">[Waiting ...]</Text>}
-      </div>
       <FlexLayout>
         {draws.map(({ label, type }) => {
           return <FCard key={type}>
@@ -201,6 +207,7 @@ const LuckyDraw: React.FC = () => {
             >
               Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]})`}
             </Button>
+            <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>View details</Button>
           </FCard>
         })}
       </FlexLayout>
