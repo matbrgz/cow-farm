@@ -46,10 +46,15 @@ import easterNftAbi from 'config/abi/easterNft.json'
 import cakeVaultAbi from 'config/abi/cakeVault.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import presaleAbi from 'config/abi/presale.json'
+import luckyDrawAbi from 'config/abi/luckyDraw.json'
 
 const getContract = (abi: any, address: string, web3?: Web3) => {
   const _web3 = web3 ?? web3NoAccount
   return new _web3.eth.Contract((abi as unknown) as AbiItem, address)
+}
+
+export const getLuckyDrawContract = (address: string, web3?: Web3) => {
+  return getContract(luckyDrawAbi, address, web3)
 }
 
 export const getPresaleContract = (address: string, web3?: Web3) => {

@@ -28,6 +28,7 @@ const TradingCompetition = lazy(() => import('./views/TradingCompetition'))
 const Predictions = lazy(() => import('./views/Predictions'))
 const Airdrop = lazy(() => import('./views/Airdrop'))
 const Presale = lazy(() => import('./views/Presale'))
+const LuckyDraw = lazy(() => import('./views/LuckyDraw'))
 
 // This config is required for number formating
 BigNumber.config({
@@ -59,6 +60,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/airdrop" exact>
               <Airdrop />
+            </Route>
+            <Route path="/luckydraw" exact>
+              <LuckyDraw />
             </Route>
             <Route path="/presale" exact>
               <Presale />

@@ -41,7 +41,7 @@ const config: MenuEntry[] = [
     href: '/',
     // href: '/farms',
     status: {
-      text: 'COMMING',
+      text: 'COMING',
       color: 'warning',
     },
   },
@@ -51,7 +51,7 @@ const config: MenuEntry[] = [
     href: '/',
     // href: '/pools',
     status: {
-      text: 'COMMING',
+      text: 'COMING',
       color: 'warning',
     },
   },
@@ -69,7 +69,7 @@ const config: MenuEntry[] = [
     icon: 'TicketIcon',
     href: '/',
     status: {
-      text: 'COMMING',
+      text: 'COMING',
       color: 'warning',
     },
   },
@@ -83,7 +83,7 @@ const config: MenuEntry[] = [
     icon: 'TeamBattleIcon',
     href: '/',
     status: {
-      text: 'COMMING',
+      text: 'COMING',
       color: 'warning',
     },
   },
@@ -134,7 +134,7 @@ const config: MenuEntry[] = [
     icon: 'IfoIcon',
     href: '/',
     status: {
-      text: 'COMMING',
+      text: 'COMING',
       color: 'warning',
     },
   },
