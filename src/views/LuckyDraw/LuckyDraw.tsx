@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Flex, Heading, Image, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon } from '@cowswap/uikit'
+import { Flex, Heading, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -10,7 +10,6 @@ import { getLuckyDrawAddress } from 'utils/addressHelpers'
 import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
-import { BASE_URL } from 'config'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
 
 // const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
@@ -96,6 +95,7 @@ const LuckyDraw: React.FC = () => {
           })
       }
     } catch (error) {
+      console.error(error)
     }
   }, [luckyDrawContract, account, currentBlock])
 
@@ -144,7 +144,7 @@ const LuckyDraw: React.FC = () => {
           return tx.transactionHash
         })
       const res = await luckyDrawContract.methods.getUser(account).call()
-      console.log(res)
+
       alert(res._win)
       setSpinLoading({
         [type.toString()]: false
@@ -163,15 +163,15 @@ const LuckyDraw: React.FC = () => {
   }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading])
 
   const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
-    {winners['10'].length ? winners['10'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+    {winners['10'].length ? winners['10'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
   </Modal>)
 
   const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
-    {winners['100'].length ? winners['100'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+    {winners['100'].length ? winners['100'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
   </Modal>)
 
   const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
-    {winners['500'].length ? winners['500'].map(address => <Text color="#323063">{address}</Text>) : <Text color="#323063">Empty!</Text>}
+    {winners['500'].length ? winners['500'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
   </Modal>)
 
   const factoryModal = {
