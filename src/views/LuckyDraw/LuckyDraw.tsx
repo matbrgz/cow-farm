@@ -11,9 +11,10 @@ import { getLuckyDrawAddress } from 'utils/addressHelpers'
 import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
+import { BASE_BSC_SCAN_URL } from 'config'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
 import luckyCow from './images/luckyCow-animation.json'
-import feedMeSrc from './images/feed-me.svg'
+import feedMeSrc from './images/feed-me.png'
 import fieldSrc from './images/field.png'
 
 const defaultOptions = {
@@ -93,8 +94,8 @@ const draws = [
 ]
 
 const factoryColor = {
-  '10': '#FFAF8C',
-  '100': '#ABAACB',
+  '10': '#e67b57',
+  '100': '#7c7c89',
   '500': '#FFB130',
 }
 
@@ -106,7 +107,7 @@ interface WonAddressProps {
 }
 
 const WonAddress: React.FC<WonAddressProps> = ({address, account}) => {
-  return <p style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}>{address}</p>
+  return <p style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}><a rel="noreferrer" target="_blank" href={`${BASE_BSC_SCAN_URL}/address/${address}`}>{address}</a></p>
 }
 
 const LuckyDraw: React.FC = () => {
@@ -210,15 +211,15 @@ const LuckyDraw: React.FC = () => {
   }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading, toastSuccess, toastError])
 
   const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
-    {winners['10'].length ? winners['10'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['10'].length ? winners['10'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
-    {winners['100'].length ? winners['100'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['100'].length ? winners['100'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
-    {winners['500'].length ? winners['500'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['500'].length ? winners['500'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const factoryModal = {
@@ -240,7 +241,6 @@ const LuckyDraw: React.FC = () => {
           alt="lucky-draw"
           width={250}
           height={250}/>}
-        <Text textAlign="center" color="#323063">Feed me, please!</Text>
         <FlexLayout>
           {draws.map(({ label, type }) => {
             return <FCard key={type}>
