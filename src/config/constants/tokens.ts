@@ -6,7 +6,7 @@ const tokens = {
   cow: {
     symbol: 'GOUDA',
     address: {
-      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+      56: '0x14B06bF2C5B0AFd259c47c4be39cB9368ef0be3f',
       97: '0x14b06bf2c5b0afd259c47c4be39cb9368ef0be3f',
     },
     decimals: 18,
