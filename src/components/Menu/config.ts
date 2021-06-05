@@ -31,12 +31,12 @@ const config: MenuEntry[] = [
       {
         label: 'Exchange',
         href: '/',
-        // href: 'https://exchange.cowswap.finance/#/swap',
+        // href: 'https://exchange.cowswap.app/#/swap',
       },
       {
         label: 'Liquidity',
         href: '/',
-        // href: 'https://exchange.cowswap.finance/#/pool',
+        // href: 'https://exchange.cowswap.app/#/pool',
       },
     ],
   },
@@ -150,11 +150,11 @@ const config: MenuEntry[] = [
     items: [
       // {
       //   label: 'Contact',
-      //   href: 'https://docs.cowswap.finance/contact-us',
+      //   href: 'https://docs.cowswap.app/contact-us',
       // },
       // {
       //   label: 'Voting',
-      //   href: 'https://voting.cowswap.finance',
+      //   href: 'https://voting.cowswap.app',
       // },
       {
         label: 'Github',
@@ -162,7 +162,7 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Docs',
-        href: 'https://docs.cowswap.finance',
+        href: 'https://docs.cowswap.app',
       },
       {
         label: 'Gouda Contract',
