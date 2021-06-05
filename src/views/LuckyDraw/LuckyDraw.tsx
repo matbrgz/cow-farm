@@ -249,17 +249,24 @@ const LuckyDraw: React.FC = () => {
                   <Heading color={factoryColor[type]} mb="20px">{label}</Heading>
                 </Flex>
               </CardHeading>
-              <Button
+              {account ? <Button
                 variant="success"
                 mt="20px"
                 width="100%"
-                isLoading={spinLoading}
+                isLoading={(MAX_TIME - userResult[type]) && spinLoading}
                 disabled={MAX_TIME - userResult[type] < 1 || won === undefined || won}
                 onClick={() => handleDraw(type)}
                 endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
               >
                 Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]} grass)`}
-              </Button>
+              </Button> : <Button
+                variant="success"
+                mt="20px"
+                width="100%"
+                disabled
+              >
+                Wallet is not connected
+              </Button>}
               <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>Winner list</Button>
             </FCard>
           })}
