@@ -66,6 +66,11 @@ const FCard = styled.div`
   margin-top: 25px;
 `
 
+const AddresesStyled = styled.div`
+  height: 300px;
+  overflow: auto
+`
+
 const CardHeading = styled(Flex)`
   display: flex;
   margin-bottom: 20px;
@@ -107,7 +112,7 @@ interface WonAddressProps {
 }
 
 const WonAddress: React.FC<WonAddressProps> = ({address, account}) => {
-  return <p style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}><a rel="noreferrer" target="_blank" href={`${BASE_BSC_SCAN_URL}/address/${address}`}>{address}</a></p>
+  return <p key={address} style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}><a rel="noreferrer" target="_blank" href={`${BASE_BSC_SCAN_URL}/address/${address}`}>{address}</a></p>
 }
 
 const LuckyDraw: React.FC = () => {
@@ -211,15 +216,15 @@ const LuckyDraw: React.FC = () => {
   }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading, toastSuccess, toastError])
 
   const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
-    {winners['10'].length ? winners['10'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
+    <AddresesStyled>{winners['10'].length ? winners['10'].map(address => <WonAddress key={address} address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}</AddresesStyled>
   </Modal>)
 
   const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
-    {winners['100'].length ? winners['100'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
+    <AddresesStyled>{winners['100'].length ? winners['100'].map(address => <WonAddress key={address} address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}</AddresesStyled>
   </Modal>)
 
   const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
-    {winners['500'].length ? winners['500'].map(address => <WonAddress address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}
+    <AddresesStyled>{winners['500'].length ? winners['500'].map(address => <WonAddress key={address} address={address} account={account} />) : <Text style={{ width: "425px" }} color="#323063">No winners... yet!</Text>}</AddresesStyled>
   </Modal>)
 
   const factoryModal = {
