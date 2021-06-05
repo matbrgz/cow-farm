@@ -36,6 +36,21 @@ const ShareBtnStyled = styled.div`
   margin-bottom: 15px
 `
 
+const TwitterStyled = styled.div`
+  width: 80%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    & > div {
+      grid-column: span 8;
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    & > div {
+      width: 100%;
+    }
+  }
+`
+
 // const Cards = styled(BaseLayout)`
 //   align-items: stretch;
 //   justify-content: stretch;
@@ -90,17 +105,20 @@ const Home: React.FC = () => {
           {t('Coming Soon')}
         </Heading>
         <Text mb="24px">{t('We will be celebrating the launch of our new site very soon')}</Text>
-        <TwitterTimelineEmbed
+        <TwitterStyled>
+          <TwitterTimelineEmbed
             sourceType="profile"
             screenName="cowswap_finance"
             noFooter
             noHeader
             placeholder="Loading..."
             options={{ height: 450 }}
+            style={{ width: "80%"}}
           />
-          <ShareBtnStyled>
-            <TwitterFollowButton screenName="cowswap_finance" options={{size: 'large'}} />
-          </ShareBtnStyled>
+        </TwitterStyled>
+        <ShareBtnStyled>
+          <TwitterFollowButton screenName="cowswap_finance" options={{size: 'large'}} />
+        </ShareBtnStyled>
       </Hero>
       {/* <div>
         <Cards>

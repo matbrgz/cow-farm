@@ -42,16 +42,16 @@ const CardHeading = styled(Flex)`
 
 const draws = [
   {
-    label: 'Win 10 Gouda',
-    type: 10
+    label: 'Win 500 Gouda',
+    type: 500
   },
   {
     label: 'Win 100 Gouda',
     type: 100
   },
   {
-    label: 'Win 500 Gouda',
-    type: 500
+    label: 'Win 10 Gouda',
+    type: 10
   },
 ]
 
@@ -63,7 +63,7 @@ const LuckyDraw: React.FC = () => {
   const [won, setWon] = useState(undefined)
   const { currentBlock } = useBlock()
   const { account } = useWeb3React()
-  const [spinLoading, setSpinLoading] = useState({})
+  const [spinLoading, setSpinLoading] = useState(false)
   const [userResult, setUserResult] = useState({
     '10': -1,
     '100': -1,
@@ -134,9 +134,7 @@ const LuckyDraw: React.FC = () => {
 
   const handleDraw = useCallback(async (type) => {
     try {
-      setSpinLoading({
-        [type.toString()]: true
-      })
+      setSpinLoading(true)
       await luckyDrawContract.methods
         .random(type)
         .send({ from: account, gas: 200000, to: luckyDrawAddress })
@@ -144,34 +142,30 @@ const LuckyDraw: React.FC = () => {
           return tx.transactionHash
         })
       const res = await luckyDrawContract.methods.getUser(account).call()
-
-      alert(res._win)
-      setSpinLoading({
-        [type.toString()]: false
-      })
-      // toastSuccess(
-      //   'Airdrop',
-      //   'Your GOUDA have been transferred to your wallet!',
-      // )
+      setSpinLoading(false)
+      if (res._win) {
+        return toastSuccess(
+          'Lucky Draw',
+          `Congratulations! You Won ${type} Gouda`,
+        )
+      }
+      return toastError('Lucky Draw', 'Better luck next time!!!')
     } catch (e) {
-      // toastError('Canceled', 'Please try again and confirm the transaction.')
-      // setClaiming(false)
-      setSpinLoading({
-        [type.toString()]: false
-      })
+      toastError('Lucky Draw', 'Please try again !')
+      return setSpinLoading(false)
     }
-  }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading])
+  }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading, toastSuccess, toastError])
 
   const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
-    {winners['10'].length ? winners['10'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
+    {winners['10'].length ? winners['10'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
-    {winners['100'].length ? winners['100'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
+    {winners['100'].length ? winners['100'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
-    {winners['500'].length ? winners['500'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">Empty!</Text>}
+    {winners['500'].length ? winners['500'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const factoryModal = {
@@ -200,10 +194,10 @@ const LuckyDraw: React.FC = () => {
               variant="subtle"
               mt="20px"
               width="100%"
-              isLoading={spinLoading[type]}
+              isLoading={spinLoading}
               disabled={MAX_TIME - userResult[type] < 1 || won === undefined || won}
               onClick={() => handleDraw(type)}
-              endIcon={won === undefined || spinLoading[type] || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
+              endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
             >
               Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]})`}
             </Button>
