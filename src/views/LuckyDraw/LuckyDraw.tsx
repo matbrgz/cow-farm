@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Flex, Heading, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon } from '@cowswap/uikit'
+import Lottie from 'react-lottie';
+import { Flex, Heading, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon, Image } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -11,8 +12,18 @@ import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
-
+import luckyCow from './images/luckyCow-animation.json'
+import feedMeSrc from './images/feed-me.svg'
 // const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true, 
+  animationData: luckyCow,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
 
 const FCard = styled.div`
   align-self: baseline;
@@ -36,7 +47,7 @@ const CardHeading = styled(Flex)`
     margin-right: 4px;
   }
   h2 {
-    font-size: 31px !important
+    font-size: 27px !important
   }
 `
 
@@ -56,6 +67,15 @@ const draws = [
 ]
 
 const MAX_TIME = 3
+
+interface WonAddressProps {
+  address: string
+  account: string
+}
+
+const WonAddress: React.FC<WonAddressProps> = ({address, account}) => {
+  return <p style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}>{address}</p>
+}
 
 const LuckyDraw: React.FC = () => {
   const web3 = useWeb3()
@@ -157,15 +177,15 @@ const LuckyDraw: React.FC = () => {
   }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading, toastSuccess, toastError])
 
   const [onPresentWon10Modal] = useModal(<Modal title="Won 10 GOUDA">
-    {winners['10'].length ? winners['10'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['10'].length ? winners['10'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon100Modal] = useModal(<Modal title="Won 100 GOUDA">
-    {winners['100'].length ? winners['100'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['100'].length ? winners['100'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const [onPresentWon500Modal] = useModal(<Modal title="Won 500 GOUDA">
-    {winners['500'].length ? winners['500'].map(address => <p style={{wordBreak: "break-all", color: "#323063", marginBottom: 15 }}>{address}</p>) : <Text color="#323063">No winners... yet!</Text>}
+    {winners['500'].length ? winners['500'].map(address => <WonAddress address={address} account={account} />) : <Text color="#323063">No winners... yet!</Text>}
   </Modal>)
 
   const factoryModal = {
@@ -176,22 +196,27 @@ const LuckyDraw: React.FC = () => {
 
   return (
     <Page>
-      <FlexLayout>
-        <Heading as="h1" textAlign="left" size="xl" mb="24px" color="text">
-          Lucky draw
-        </Heading>
-      </FlexLayout>
+      <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
+        Lucky draw
+      </Heading>
+      {spinLoading ? <Lottie options={defaultOptions}
+        width={250}
+      /> : <Image mx="auto"
+        src={feedMeSrc}
+        alt="lucky-draw"
+        width={250}
+        height={250}/>}
+      <Text textAlign="center" color="#323063">Feed me, please!</Text>
       <FlexLayout>
         {draws.map(({ label, type }) => {
           return <FCard key={type}>
             <CardHeading>
               <Flex justifyContent="center" alignItems="center">
-                <Heading fontSize="25px" color="#323063" mb="20px">{label}</Heading>
-                {/* <Image src={goudaIcon} alt="GOUDA - BNB" width={50} height={50} /> */}
+                <Heading color="text" mb="20px">{label}</Heading>
               </Flex>
             </CardHeading>
             <Button
-              variant="subtle"
+              variant="success"
               mt="20px"
               width="100%"
               isLoading={spinLoading}
@@ -199,9 +224,9 @@ const LuckyDraw: React.FC = () => {
               onClick={() => handleDraw(type)}
               endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
             >
-              Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]})`}
+              Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]} grass)`}
             </Button>
-            <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>View details</Button>
+            <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>Winner list</Button>
           </FCard>
         })}
       </FlexLayout>
