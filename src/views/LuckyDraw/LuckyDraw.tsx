@@ -14,7 +14,7 @@ import { useBlock } from 'state/hooks'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
 import luckyCow from './images/luckyCow-animation.json'
 import feedMeSrc from './images/feed-me.svg'
-// const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
+import fieldSrc from './images/field.png'
 
 const defaultOptions = {
   loop: true,
@@ -24,6 +24,32 @@ const defaultOptions = {
     preserveAspectRatio: 'xMidYMid slice'
   }
 };
+
+const PageStyled = styled(Page)`
+  ${({ theme }) => theme.mediaQueries.xs} {
+    background-image: url(${fieldSrc});
+    background-size: cover;
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    background-image: none;
+  }
+  background-image: none;
+`
+
+const StyledImage = styled.img`
+  ${({ theme }) => theme.mediaQueries.xs} {
+    display: none;
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
+  }
+`
 
 const FCard = styled.div`
   align-self: baseline;
@@ -65,6 +91,12 @@ const draws = [
     type: 10
   },
 ]
+
+const factoryColor = {
+  '10': '#FFAF8C',
+  '100': '#ABAACB',
+  '500': '#FFB130',
+}
 
 const MAX_TIME = 3
 
@@ -155,6 +187,7 @@ const LuckyDraw: React.FC = () => {
   const handleDraw = useCallback(async (type) => {
     try {
       setSpinLoading(true)
+      window.scrollTo(0, 200);
       await luckyDrawContract.methods
         .random(type)
         .send({ from: account, gas: 200000, to: luckyDrawAddress })
@@ -195,42 +228,45 @@ const LuckyDraw: React.FC = () => {
   }
 
   return (
-    <Page>
-      <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
-        Lucky draw
-      </Heading>
-      {spinLoading ? <Lottie options={defaultOptions}
-        width={250}
-      /> : <Image mx="auto"
-        src={feedMeSrc}
-        alt="lucky-draw"
-        width={250}
-        height={250}/>}
-      <Text textAlign="center" color="#323063">Feed me, please!</Text>
-      <FlexLayout>
-        {draws.map(({ label, type }) => {
-          return <FCard key={type}>
-            <CardHeading>
-              <Flex justifyContent="center" alignItems="center">
-                <Heading color="text" mb="20px">{label}</Heading>
-              </Flex>
-            </CardHeading>
-            <Button
-              variant="success"
-              mt="20px"
-              width="100%"
-              isLoading={spinLoading}
-              disabled={MAX_TIME - userResult[type] < 1 || won === undefined || won}
-              onClick={() => handleDraw(type)}
-              endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
-            >
-              Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]} grass)`}
-            </Button>
-            <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>Winner list</Button>
-          </FCard>
-        })}
-      </FlexLayout>
-    </Page>
+    <>
+      <PageStyled>
+        <Heading as="h1" textAlign="center" size="xl" mb="24px" color="text">
+          Lucky draw
+        </Heading>
+        {spinLoading ? <Lottie options={defaultOptions}
+          width={250}
+        /> : <Image mx="auto"
+          src={feedMeSrc}
+          alt="lucky-draw"
+          width={250}
+          height={250}/>}
+        <Text textAlign="center" color="#323063">Feed me, please!</Text>
+        <FlexLayout>
+          {draws.map(({ label, type }) => {
+            return <FCard key={type}>
+              <CardHeading>
+                <Flex justifyContent="center" alignItems="center">
+                  <Heading color={factoryColor[type]} mb="20px">{label}</Heading>
+                </Flex>
+              </CardHeading>
+              <Button
+                variant="success"
+                mt="20px"
+                width="100%"
+                isLoading={spinLoading}
+                disabled={MAX_TIME - userResult[type] < 1 || won === undefined || won}
+                onClick={() => handleDraw(type)}
+                endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
+              >
+                Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]} grass)`}
+              </Button>
+              <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>Winner list</Button>
+            </FCard>
+          })}
+        </FlexLayout>
+      </PageStyled>
+      <StyledImage src={fieldSrc} />
+    </>
   )
 }
 

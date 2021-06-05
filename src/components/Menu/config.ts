@@ -9,6 +9,11 @@ const config: MenuEntry[] = [
     icon: 'HomeIcon',
     href: '/',
   },
+  {
+    label: 'Lucky draw',
+    icon: 'LuckyDrawIcon',
+    href: '/luckydraw',
+  },
   // {
   //   label: 'Airdrop',
   //   icon: 'AirdropIcon',
@@ -80,7 +85,7 @@ const config: MenuEntry[] = [
   // },
   {
     label: 'NFT',
-    icon: 'TeamBattleIcon',
+    icon: 'NftIcon',
     href: '/',
     status: {
       text: 'COMING',
