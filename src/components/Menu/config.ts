@@ -19,11 +19,11 @@ const config: MenuEntry[] = [
   //   icon: 'AirdropIcon',
   //   href: '/airdrop',
   // },
-  // {
-  //   label: 'Presale',
-  //   icon: 'PresaleIcon',
-  //   href: '/presale',
-  // },
+  {
+    label: 'Presale',
+    icon: 'PresaleIcon',
+    href: '/presale',
+  },
   {
     label: 'Trade',
     icon: 'TradeIcon',
