@@ -132,8 +132,9 @@ const LuckyDrawActions = ({type, handleDraw, winners, spinLoading, account, won,
       variant="success"
       mt="20px"
       width="100%"
-      disabled={isClaimed}
+      disabled={isClaimed || spinLoading}
       onClick={handleClaim}
+      endIcon={spinLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
     >
       {isClaimed ? 'Claimed' : 'Claim your prize'}
     </Button>
