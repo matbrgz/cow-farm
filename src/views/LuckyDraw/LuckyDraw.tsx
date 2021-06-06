@@ -195,7 +195,7 @@ const LuckyDraw: React.FC = () => {
     return getLuckyDrawContract(luckyDrawAddress, web3)
   }, [luckyDrawAddress, web3])
 
-  const handleClaim= useCallback(async (type) => {
+  const handleClaim= useCallback(async () => {
     try {
       setSpinLoading(true)
       window.scrollTo(0, 200);
@@ -226,7 +226,7 @@ const LuckyDraw: React.FC = () => {
               '100': _time100,
               '500': _time500
             })
-            console.log(Number(_prize))
+
             setWonPrize(Number(_prize))
             setIsClaimed(_claim)
           })
@@ -340,7 +340,6 @@ const LuckyDraw: React.FC = () => {
         )}
         <FlexLayout>
           {draws.map(({ label, type }) => {
-            const isOutOfSlots = winners[type].length >= factorySlots[type]
             return <FCard key={type}>
               <CardHeading>
                 <Flex justifyContent="center" alignItems="center">
