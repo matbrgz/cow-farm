@@ -377,7 +377,7 @@ const Presale: React.FC = () => {
               <Flex justifyContent="flex-start" style={{
                 cursor: 'pointer',
                 marginTop: 15
-              }} onClick={() => registerToken(presaleAddress, 'GOUDA', 18, goudaSrc)}>
+              }} onClick={() => registerToken(getAddress(tokens.cow.address), 'GOUDA', 18, goudaSrc)}>
                 <Text
                   color="textSubtle"
                   small
