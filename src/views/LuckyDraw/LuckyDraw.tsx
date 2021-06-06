@@ -1,21 +1,25 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import Lottie from 'react-lottie';
-import { Flex, Heading, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon, Image } from '@cowswap/uikit'
+import { Flex, Heading, Text, Button, AutoRenewIcon, Modal, useModal, PrizeIcon, Image, MetamaskIcon } from '@cowswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import { useWeb3React } from '@web3-react/core'
 import { getLuckyDrawContract } from 'utils/contractHelpers'
 import multicall from 'utils/multicall'
-import { getLuckyDrawAddress } from 'utils/addressHelpers'
+import { getLuckyDrawAddress, getAddress } from 'utils/addressHelpers'
+import tokens from 'config/constants/tokens'
 import useToast from 'hooks/useToast'
 import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
-import { BASE_BSC_SCAN_URL } from 'config'
+import { BASE_BSC_SCAN_URL, BASE_URL } from 'config'
 import luckyDrawAbi from 'config/abi/luckyDraw.json'
+import { registerToken } from 'utils/wallet'
 import luckyCow from './images/luckyCow-animation.json'
 import feedMeSrc from './images/feed-me.png'
 import fieldSrc from './images/field.png'
+
+const goudaSrc = `${BASE_URL}/images/tokens/GOUDA.png`
 
 const defaultOptions = {
   loop: true,
@@ -104,6 +108,12 @@ const factoryColor = {
   '500': '#FFB130',
 }
 
+const factorySlots = {
+  '10': 1000,
+  '100': 100,
+  '500': 3,
+}
+
 const MAX_TIME = 3
 
 interface WonAddressProps {
@@ -115,13 +125,57 @@ const WonAddress: React.FC<WonAddressProps> = ({address, account}) => {
   return <p key={address} style={{wordBreak: "break-all", color: address === account ? "#1FC7D4" : "#323063", marginBottom: 15 }}><a rel="noreferrer" target="_blank" href={`${BASE_BSC_SCAN_URL}/address/${address}`}>{address}</a></p>
 }
 
+const LuckyDrawActions = ({type, handleDraw, winners, spinLoading, account, won, spinTimes, handleClaim, isClaimed}) => {
+  const isOutOfSlots = winners[type].length >= factorySlots[type]
+  if (String(won) === String(type)) {
+    return <Button
+      variant="success"
+      mt="20px"
+      width="100%"
+      disabled={isClaimed}
+      onClick={handleClaim}
+    >
+      {isClaimed ? 'Claimed' : 'Claim your prize'}
+    </Button>
+  }
+  if (isOutOfSlots) {
+    return <Button
+      variant="success"
+      mt="20px"
+      width="100%"
+      disabled
+    >
+      This Prize is out of slots
+    </Button>
+  }
+  return account ? <Button
+    variant="success"
+    mt="20px"
+    width="100%"
+    isLoading={(MAX_TIME - spinTimes) && spinLoading}
+    disabled={MAX_TIME - spinTimes < 1 || won === undefined || won}
+    onClick={() => handleDraw(type)}
+    endIcon={won === undefined || spinLoading || spinTimes === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
+  >
+    Spin {won === undefined || spinTimes === -1 ? '' : `(${MAX_TIME - spinTimes} grass)`}
+  </Button> : <Button
+    variant="success"
+    mt="20px"
+    width="100%"
+    disabled
+  >
+    Wallet is not connected
+  </Button>
+}
+
 const LuckyDraw: React.FC = () => {
   const web3 = useWeb3()
   const { toastSuccess, toastError } = useToast()
-  const [won, setWon] = useState(undefined)
+  const [wonPrize, setWonPrize] = useState(undefined)
   const { currentBlock } = useBlock()
   const { account } = useWeb3React()
   const [spinLoading, setSpinLoading] = useState(false)
+  const [isClaimed, setIsClaimed] = useState()
   const [userResult, setUserResult] = useState({
     '10': -1,
     '100': -1,
@@ -133,23 +187,48 @@ const LuckyDraw: React.FC = () => {
     '500': []
   })
 
+  const isMetaMaskInScope = !!(window as WindowChain).ethereum?.isMetaMask
+
   const luckyDrawAddress = getLuckyDrawAddress()
 
   const luckyDrawContract = useMemo(() => {
     return getLuckyDrawContract(luckyDrawAddress, web3)
   }, [luckyDrawAddress, web3])
 
+  const handleClaim= useCallback(async (type) => {
+    try {
+      setSpinLoading(true)
+      window.scrollTo(0, 200);
+      await luckyDrawContract.methods
+        .claim()
+        .send({ from: account, gas: 200000, to: luckyDrawAddress })
+        .on('transactionHash', (tx) => {
+          return tx.transactionHash
+        })
+      setSpinLoading(false)
+      return toastSuccess(
+        'Lucky Draw',
+        `Your GOUDA have been transferred to your wallet!`,
+      )
+    } catch (e) {
+      toastError('Lucky Draw', 'Please try again !')
+      return setSpinLoading(false)
+    }
+  }, [luckyDrawContract, account, luckyDrawAddress, setSpinLoading, toastSuccess, toastError])
+
   useEffect(() => {
     try {
       if (account) {
         luckyDrawContract.methods.getUser(account).call()
-          .then(({_time500, _time100, _time10, _win}) => {
+          .then(({_time500, _time100, _time10, _prize, _claim}) => {
             setUserResult({
               '10': _time10,
               '100': _time100,
               '500': _time500
             })
-            setWon(_win)
+            console.log(Number(_prize))
+            setWonPrize(Number(_prize))
+            setIsClaimed(_claim)
           })
       }
     } catch (error) {
@@ -246,32 +325,39 @@ const LuckyDraw: React.FC = () => {
           alt="lucky-draw"
           width={250}
           height={250}/>}
+        {account && isMetaMaskInScope && (
+          <Flex justifyContent="center" style={{
+            cursor: 'pointer',
+          }} onClick={() => registerToken(getAddress(tokens.cow.address), 'GOUDA', 18, goudaSrc)}>
+            <Text
+              color="textSubtle"
+              small
+            >
+              Add GOUDA to Metamask
+            </Text>
+            <MetamaskIcon ml="4px" />
+          </Flex>
+        )}
         <FlexLayout>
           {draws.map(({ label, type }) => {
+            const isOutOfSlots = winners[type].length >= factorySlots[type]
             return <FCard key={type}>
               <CardHeading>
                 <Flex justifyContent="center" alignItems="center">
                   <Heading color={factoryColor[type]} mb="20px">{label}</Heading>
                 </Flex>
               </CardHeading>
-              {account ? <Button
-                variant="success"
-                mt="20px"
-                width="100%"
-                isLoading={(MAX_TIME - userResult[type]) && spinLoading}
-                disabled={MAX_TIME - userResult[type] < 1 || won === undefined || won}
-                onClick={() => handleDraw(type)}
-                endIcon={won === undefined || spinLoading || userResult[type] === -1 ? <AutoRenewIcon spin color="currentColor" /> : null}
-              >
-                Spin {won === undefined || userResult[type] === -1 ? '' : `(${MAX_TIME - userResult[type]} grass)`}
-              </Button> : <Button
-                variant="success"
-                mt="20px"
-                width="100%"
-                disabled
-              >
-                Wallet is not connected
-              </Button>}
+              <LuckyDrawActions
+                type={type}
+                handleDraw={handleDraw}
+                winners={winners}
+                spinLoading={spinLoading}
+                account={account}
+                won={wonPrize}
+                spinTimes={userResult[type]}
+                handleClaim={handleClaim}
+                isClaimed={isClaimed}
+              />
               <Button mt="15px" variant="primary" onClick={factoryModal[type]} endIcon={<PrizeIcon width="25px" color="currentColor" />}>Winner list</Button>
             </FCard>
           })}
