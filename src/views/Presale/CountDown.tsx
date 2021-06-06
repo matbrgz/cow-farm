@@ -56,7 +56,7 @@ const CountDown: React.FC = () => {
     <Page>
       <FlexLayout>
       <Heading as="h1" size="lg" mb="24px" color="secondary" textAlign="center">
-        Presale countdown
+        We&apos;re launching soon
       </Heading>
       </FlexLayout>
       <FlexLayout>
