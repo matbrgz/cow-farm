@@ -110,7 +110,7 @@ const factoryColor = {
 
 const factorySlots = {
   '10': 1000,
-  '100': 100,
+  '100': 10,
   '500': 3,
 }
 
