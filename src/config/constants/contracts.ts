@@ -5,7 +5,7 @@ export default {
   },
   luckyDraw: {
     97: '0x282417D4fA59Df58c6cDBB69E4d0B6FEB248C2ed',
-    56: '0x4398aB800bA35b5Dc6Ea6d9752E324790EaFe516',
+    56: '0x4398ab800ba35b5dc6ea6d9752e324790eafe516',
   },
   masterChef: {
     97: '0xf2811d44770a10b0ab717008835192c41a8495f1',
