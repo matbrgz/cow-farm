@@ -95,6 +95,7 @@ const Presale: React.FC = () => {
   const { account } = useWeb3React()
   const [valBnb, setValBnb] = useState('')
   const [valBusd, setValBusd] = useState('')
+  const [unlockedBlocknumber, setUnlockedBlocknumber] = useState('')
   const [estimatedBnbToGouda, setEstimatedBnbToGouda] = useState('0,00')
   const [estimatedBusdToGouda, setEstimatedBusdToGouda] = useState('0,00')
   const [countdown, setCountdown] = useState('00:00:00')
@@ -221,7 +222,8 @@ const Presale: React.FC = () => {
           setPresaleToken(new BigNumber(presaleTotal).minus(new BigNumber(remainAirdrop)).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
           setRemainingToken(tokenLeft.toNumber().toLocaleString('en-US', { maximumFractionDigits: 0 }))
           setYourGouda(new BigNumber(boughtGouda).div(DEFAULT_TOKEN_DECIMAL).toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 }))
-          setCountdown(secondsToTime(new BigNumber(blockToUnblock).minus(currentBlock).toNumber() * 5))
+          setUnlockedBlocknumber(new BigNumber(blockToUnblock).toString())
+          setCountdown(secondsToTime(new BigNumber(blockToUnblock).minus(currentBlock).toNumber() * 3))
         })
       }
     } catch (error) {
@@ -370,7 +372,8 @@ const Presale: React.FC = () => {
                 Unlock time remaining:
               </p>
               <p style={{ fontSize: 13, color: '#1DA1F2', textAlign: "center", marginTop: 6 }}>
-                {countdown}
+                {/* {countdown} */}
+                {unlockedBlocknumber !== '' ? <a rel="noreferrer" target="_blank" href={`https://bscscan.com/block/countdown/${unlockedBlocknumber}`}>View {unlockedBlocknumber}</a> : 'fetching ...'}
               </p>
             </div>
             {account && isMetaMaskInScope && (
