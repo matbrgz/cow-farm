@@ -27,7 +27,7 @@ const Profile = lazy(() => import('./views/Profile'))
 const TradingCompetition = lazy(() => import('./views/TradingCompetition'))
 const Predictions = lazy(() => import('./views/Predictions'))
 const Airdrop = lazy(() => import('./views/Airdrop'))
-const Presale = lazy(() => import('./views/Presale/CountDown'))
+const Presale = lazy(() => import('./views/Presale'))
 const LuckyDraw = lazy(() => import('./views/LuckyDraw'))
 
 // This config is required for number formating
