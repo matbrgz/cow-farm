@@ -10,6 +10,15 @@ const config: MenuEntry[] = [
     href: '/',
   },
   {
+    label: 'Presale',
+    icon: 'PresaleIcon',
+    href: '/presale',
+    status: {
+      text: "LIVE",
+      color: "failure",
+    },
+  },
+  {
     label: 'Lucky draw',
     icon: 'LuckyDrawIcon',
     href: '/luckydraw',
@@ -19,11 +28,6 @@ const config: MenuEntry[] = [
   //   icon: 'AirdropIcon',
   //   href: '/airdrop',
   // },
-  {
-    label: 'Presale',
-    icon: 'PresaleIcon',
-    href: '/presale',
-  },
   {
     label: 'Trade',
     icon: 'TradeIcon',
