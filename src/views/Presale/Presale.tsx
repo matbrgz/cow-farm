@@ -396,7 +396,7 @@ const Presale: React.FC = () => {
               mx="auto"
               mt="12px"
               src={presaleBackground}
-              alt="Pancake illustration"
+              alt="cowswap illustration"
               width={300}
               height={230}
             />
